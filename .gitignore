@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+check_plots/
+characterization/epoch*/pointings.list
+.DS_Store
+*.egg-info/
+.venv/
+venv/
