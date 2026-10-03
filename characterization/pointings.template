@@ -1,4 +1,4 @@
-# JWST Sample A epoch {epoch} (CADC 1568 visit midpoint, shift-and-stack)
-# Mosaic side = sqrt(0.05 deg^2); fill=1 (not 1.6 deg implant box)
-# Generated into epoch*/pointings.list at run time; do not commit those files.
-{side:.5f} {side:.5f} {ra:.5f} {dec:.6f} {jd:.5f} {fill:.5f} {observer_csv} {eff_file}
+# N26 Napier et al. 2026 (PSJ 7, 117) heliostack of Bernstein 2004 GO-9433
+# 400" × 600" ACS mosaic (~0.02 deg²); 15-day stack midpoint, not 3-epoch AND.
+# Generated into pointings.list at run time; do not commit that file.
+{width:.5f} {height:.5f} {ra:.5f} {dec:.6f} {jd:.5f} {fill:.5f} {observer_csv} {eff_file}

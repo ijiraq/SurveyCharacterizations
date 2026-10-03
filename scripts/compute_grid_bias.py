@@ -1,27 +1,26 @@
 #!/usr/bin/env python3
-"""Grid-cell debiasing for JWST Sample A (Kavelaars et al. 2022 ac2c72 method)."""
+"""Grid-cell debiasing for Napier et al. 2026 N26 heliostack detections."""
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 
-_SCRIPTS = Path(__file__).resolve().parent
-if str(_SCRIPTS) not in sys.path:
-    sys.path.insert(0, str(_SCRIPTS))
+_SRC = Path(__file__).resolve().parents[2] / "src"
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
 
-from ssim_paths import PROJECT_ROOT, add_ssim_src  # noqa: E402
+from ossssim.grid_bias import A_STEP, H_STEP, N26_HELIOSTACK, Q_STEP, SI_STEP
+from ossssim.grid_bias_run import main
 
-add_ssim_src()
-
-from ossssim.grid_bias import A_STEP, H_STEP, JWST_SAMPLE_A, Q_STEP, SI_STEP  # noqa: E402
-from ossssim.grid_bias_run import main  # noqa: E402
-
-_HEADER = f"""# File: JWST-free-cla_m.detections-full
+_HEADER = f"""# File: N26-free-cla_m.detections-full
 #
-# Grid debiasing ac2c72; Eduardo et al. 2026 Sample A (20 objects)
-# H_r from m_F150W2 + 1.0 - 5log10(r Δ) + 2.5log10(Bowell Φ), r=Δ=d_bary, G=-0.12
-# Catalog i_free uses Ω=0 (node not in Sample A CSV)
+# Grid debiasing ac2c72; Napier et al. 2026 (PSJ 7, 117) heliostack of
+# Bernstein 2004 GO-9433 ACS WFC F606W. Four objects (BF91, BH91, ABCD, WXYZ).
+# r_AB = STMAG_F606W - 0.3; H_r from r_AB - 5log10(r Δ) + 2.5log10(Bowell Φ)
+# a, e are Napier Table 2 a_min, e_min (CC-assumption lower bounds, 15-day arc)
+# i_free is the midpoint of the Table 2 95% CI under the CC assumption
 # Extra after MPC: ifree Omfree omfree (Laplace-free; Omfree=omfree=0), Hx, comp, bias
+# Single 15-day stack (n_epochs=1), not 3-epoch AND
 #
 # Grid size:
 # h_step:  {H_STEP}
@@ -34,7 +33,7 @@ _HEADER = f"""# File: JWST-free-cla_m.detections-full
 
 if __name__ == "__main__":
     main(
-        JWST_SAMPLE_A,
-        default_root=PROJECT_ROOT,
+        N26_HELIOSTACK,
+        default_root=Path(__file__).resolve().parents[1],
         extra_header=_HEADER,
     )
