@@ -1,3 +1,5 @@
 numpy>=1.20
 astropy>=5.0
-matplotlib>=3.5
+# ossssim: SurveySimulator (cursor/multi-epoch-survey-root-5dc8 or later),
+#   pip install /path/to/SurveySimulator
+# survey_debias: pip install /path/to/survey_debias

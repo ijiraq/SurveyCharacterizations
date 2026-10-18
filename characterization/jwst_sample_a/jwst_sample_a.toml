@@ -1,0 +1,49 @@
+# JWST GO 1568 Sample A (Eduardo et al. 2026, AJ 172, 187).
+#
+#   survey_debias --survey characterization/jwst_sample_a/jwst_sample_a.toml \
+#       --root . --model Models/OSSOS
+#
+# Short arcs do not constrain (a, e), so this survey uses model_ae.
+#
+# Paths are relative to --root (the repository root). Everything for this
+# survey lives in characterization/jwst_sample_a/:
+#   jwst_sample_a.toml   this file
+#   jwst_sample_a.csv    detections
+#   survey.conf          detections_required = 3
+#   epoch{1,2,3}/
+#     pointings.list       one 0.05 deg^2 mosaic line per CADC visit midpoint
+#     jwst_sample_a.eff    F150W2 efficiency, filter= H
+#     JWST.csv             JPL Horizons observer vectors
+# Colours come from the shared colour.toml at the root ("H-g" = -1.7:
+# m_r = m_F150W2 + 1).
+
+[survey]
+name = "JWST Sample A"
+model_band = "r"
+colour_file = "colour.toml"
+surveys = ["jwst_sample_a"]
+paper_reference_jd = 2459974.5  # orbit-fit reference, not a visit
+rate_cut_min_arcsec_hr = 0.03
+rate_cut_max_arcsec_hr = 8.66
+detections_relpath = "characterization/jwst_sample_a/jwst_sample_a.csv"
+detections_full_name = "characterization/jwst_sample_a/jwst_sample_a.detections-full"
+results_name = "characterization/jwst_sample_a/jwst_sample_a.bias.csv"
+check_detected_title = "detected at all 3 epochs"
+bias_method = "model_ae"
+
+# Program name = column in the detections table. These are the columns read.
+# model_ae requires mag, d_bary, and i.
+[detection_columns]
+mag = "m_f150w2"
+name = "name"
+a = "a"
+e = "e"
+i = "i"
+d_bary = "d_bary"
+comp = "comp"
+
+# The catalogue has no survey or block column: every row is
+# jwst_sample_a/jwst_sample_a.
+[detection_defaults]
+survey = "jwst_sample_a"
+block = "jwst_sample_a"

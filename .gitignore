@@ -1,9 +1,13 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
-check_plots/
-characterization/epoch*/pointings.list
 .DS_Store
 *.egg-info/
 .venv/
 venv/
+# survey_debias inputs and outputs
+Models/
+check_plots/
+characterization/*/bias_grid*.csv
+# ossssim writes its planetary ephemeris cache to the working directory
+Rebound_Archive*.bin

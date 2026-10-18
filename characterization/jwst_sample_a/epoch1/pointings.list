@@ -1,0 +1,5 @@
+# JWST GO 1568 Sample A, epoch 1: CADC shift-and-stack midpoint of visit 1.
+# Eduardo et al. 2026 0.05 deg^2 mosaic as a square centred on the ICRS
+# field centre 13:57:33 -10:51:55; fill factor 1.
+# width height RA Dec JD fill observer efficiency
+0.2236068 0.2236068 209.3875 -10.865278 2459969.32118 1.0 JWST.csv jwst_sample_a.eff

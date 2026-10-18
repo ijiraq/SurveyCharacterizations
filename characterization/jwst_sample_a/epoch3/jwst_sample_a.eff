@@ -1,0 +1,50 @@
+# JWST GO 1568 Sample A single-epoch detection efficiency
+# (Eduardo et al. 2026, AJ 172, 187). The same block is used at all three
+# epochs; survey.conf requires a detection at each of them.
+#
+# Magnitudes are NIRCam F150W2, labelled with the filter letter H. F150W2 is
+# close to 2MASS H; colour.toml sets r - H = 1.0 (m_r = m_F150W2 + 1).
+#
+# rate_cut= r_min r_max angle half_width
+#   r_min, r_max: implant speed range, Section III.2
+#     "speed of 0.03-8.66 "/hr were implanted across JWST integrations"
+#   angle, half_width: 0 and 180 deg accept every direction of motion. The
+#     KBMOD search grid is a (v_alpha, v_beta) box, not a PA cone (Section IV.1).
+#
+rate_cut= 0.03 8.66 0.0 180.0
+#
+# mag_error= e1 e2 e3 e4 e5 e6
+#   sigma(m) = e1 * 10**(alpha*(m - 21)) for 21 < m <= e3, with
+#   alpha = log10(e2/e1)/(e3 - 21); sigma = e2 - (m - e3)*e4 for m > e3.
+#   Gives sigma = 0.05 at m = 28.2 rising to 0.5 at m = 29.5, held at 0.5
+#   fainter. Brighter than 28.2 sigma drops below 0.05 (0.006 at m = 27).
+#   e5 = 40 switches off the asymmetric (faint-end) offset.
+#
+mag_error= 1.447e-7 0.5 29.5 0.0 40.0 0.0
+#
+# One magnitude from the stack.
+#
+phot_frac= 1.000 0.0 0.0
+#
+# track_frac= max mag slope: tracked fraction = min(max, 1 + (m - mag)*slope).
+# Slope 0: every detection is tracked, since linking across the three visits
+# is already required by survey.conf.
+#
+track_frac= 1.0 28.92 0.0
+#
+filter= H
+#
+# Rate range ["/hr] the efficiency function applies to; wider than rate_cut.
+#
+rates=  0.00 20.00
+#
+function= single
+#
+# Section IV.3.3 / VII.1: eta = p0/2 (1 - tanh((m - m0)/w)) in F150W2 with
+# p0 = 0.96, m0 = 28.92, w = 0.61.
+#
+single_param=    0.96      28.92       0.61
+#
+# Implant faint limit 30.5 in F150W2 (Section III.2).
+#
+mag_lim= 30.50
