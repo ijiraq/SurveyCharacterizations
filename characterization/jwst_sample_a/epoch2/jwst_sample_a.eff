@@ -1,30 +1,36 @@
-# JWST GO 1568 Sample A single-epoch detection efficiency
-# (Eduardo et al. 2026, AJ 172, 187). The same block is used at all three
-# epochs; survey.conf requires a detection at each of them.
+# JWST GO 1568 Sample A single-epoch detection efficiency, epoch 2
+# (Eduardo et al. 2026, AJ 172, 187). survey.conf requires a detection at
+# all three epochs, so the survey efficiency is the cube of this one, as in
+# the paper (Section 5.5: effective area A3 p_det^3(m)). The three epoch
+# files differ only in rate_cut.
 #
 # Magnitudes are NIRCam F150W2, labelled with the filter letter H. F150W2 is
 # close to 2MASS H; colour.toml sets r - H = 1.0 (m_r = m_F150W2 + 1).
 #
-# rate_cut= r_min r_max angle half_width
-#   r_min, r_max: implant speed range, Section III.2
-#     "speed of 0.03-8.66 "/hr were implanted across JWST integrations"
-#   angle, half_width: 0 and 180 deg accept every direction of motion. The
-#     KBMOD search grid is a (v_alpha, v_beta) box, not a PA cone (Section IV.1).
+# rate_cut= r_min r_max angle half_width ["/hr, deg]
+#   r_min: slowest implant, 0.03 "/hr (Section 3.2).
+#   r_max: the epoch-2 and epoch-3 KBMOD grid is -1.3 <= v_alpha <= 1.3 and
+#     -1.3 <= v_beta <= 1.3 "/hr (Section 4.1; epoch 1 searched to 2.6 "/hr
+#     in v_alpha); along the strips (PA 23 deg from the RA axis), the
+#     direction TNOs move, that box ends at 1.4 "/hr. Only bodies inside
+#     ~15 au move this fast.
+#   angle, half_width: 0 and 180 deg accept every direction of motion.
 #
-rate_cut= 0.03 8.66 0.0 180.0
+rate_cut= 0.03 1.4 0.0 180.0
 #
 # mag_error= e1 e2 e3 e4 e5 e6
-#   sigma(m) = e1 * 10**(alpha*(m - 21)) for 21 < m <= e3, with
-#   alpha = log10(e2/e1)/(e3 - 21); sigma = e2 - (m - e3)*e4 for m > e3.
-#   Gives sigma = 0.05 at m = 28.2 rising to 0.5 at m = 29.5, held at 0.5
-#   fainter. Brighter than 28.2 sigma drops below 0.05 (0.006 at m = 27).
-#   e5 = 40 switches off the asymmetric (faint-end) offset.
+#   Single-epoch sigma(m) = e1 * 10**(0.4*(m - 21)) up to e3 = 30, the
+#   background-limited form, i.e. 0.11 * 10**(0.4*(m - 28.6)): a fit to the
+#   per-epoch uncertainties in Table 1 (0.02 at 26.7, 0.04 at 27.5, 0.11 at
+#   28.6, 0.21 at 29.3). Held at 0.40 fainter than 30. e5 = 40 switches off
+#   the faint-end offset.
 #
-mag_error= 1.447e-7 0.5 29.5 0.0 40.0 0.0
+mag_error= 1.0e-4 0.40 30.0 0.0 40.0 0.0
 #
-# One magnitude from the stack.
+# phot_frac= f1 f2 f3: the catalogue magnitude is the mean over the three
+# epochs (Table 1), so always average three measurements (sigma / sqrt 3).
 #
-phot_frac= 1.000 0.0 0.0
+phot_frac= 0.0 0.0 1.0
 #
 # track_frac= max mag slope: tracked fraction = min(max, 1 + (m - mag)*slope).
 # Slope 0: every detection is tracked, since linking across the three visits
@@ -38,13 +44,45 @@ filter= H
 #
 rates=  0.00 20.00
 #
-function= single
+function= lookup
 #
-# Section IV.3.3 / VII.1: eta = p0/2 (1 - tanh((m - m0)/w)) in F150W2 with
-# p0 = 0.96, m0 = 28.92, w = 0.61.
+# Equation (8), Section 4.3.3: p_det = p0/2 erfc((m - m0)/w) with p0 = 0.96,
+# m0 = 28.92, w = 0.61, for a source that falls on a detector in both dithers.
+# OSSSSim has no erfc function, so it is tabulated (linear interpolation,
+# flat brightward of 27.3, zero faintward of 30.1; the simulator drops
+# values below 0.01). A tanh with w = 0.61 is wider than this erfc.
 #
-single_param=    0.96      28.92       0.61
+lookup_param= 27.30 0.9599
+lookup_param= 27.40 0.9598
+lookup_param= 27.50 0.9595
+lookup_param= 27.60 0.9589
+lookup_param= 27.70 0.9578
+lookup_param= 27.80 0.9555
+lookup_param= 27.90 0.9513
+lookup_param= 28.00 0.9442
+lookup_param= 28.10 0.9325
+lookup_param= 28.20 0.9144
+lookup_param= 28.30 0.8877
+lookup_param= 28.40 0.8506
+lookup_param= 28.50 0.8015
+lookup_param= 28.60 0.7401
+lookup_param= 28.70 0.6672
+lookup_param= 28.80 0.5852
+lookup_param= 28.90 0.4978
+lookup_param= 29.00 0.4094
+lookup_param= 29.10 0.3247
+lookup_param= 29.20 0.2478
+lookup_param= 29.30 0.1816
+lookup_param= 29.40 0.1276
+lookup_param= 29.50 0.0858
+lookup_param= 29.60 0.0552
+lookup_param= 29.70 0.0339
+lookup_param= 29.80 0.0198
+lookup_param= 29.90 0.0111
+lookup_param= 30.00 0.0059
+lookup_param= 30.10 0.0030
 #
-# Implant faint limit 30.5 in F150W2 (Section III.2).
+# Implant faint limit 30.5 in F150W2 (Section 3.2): every detection is
+# characterized.
 #
 mag_lim= 30.50

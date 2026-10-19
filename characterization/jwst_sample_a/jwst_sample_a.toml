@@ -6,13 +6,16 @@
 # Short arcs do not constrain (a, e), so this survey uses model_ae.
 #
 # Paths are relative to --root (the repository root). Everything for this
-# survey lives in characterization/jwst_sample_a/:
+# survey lives in characterization/jwst_sample_a/ (README.md there says
+# where every value comes from):
 #   jwst_sample_a.toml   this file
-#   jwst_sample_a.csv    detections
+#   jwst_sample_a.csv    detections (Table 1 sample A)
 #   survey.conf          detections_required = 3
+#   footprints.csv       MAST NIRCam SW footprints; make_pointings.py
+#                        turns them into the pointings.list files
 #   epoch{1,2,3}/
-#     pointings.list       one 0.05 deg^2 mosaic line per CADC visit midpoint
-#     jwst_sample_a.eff    F150W2 efficiency, filter= H
+#     pointings.list       outline of the three NIRCam strips, fill 0.91
+#     jwst_sample_a.eff    F150W2 single-epoch efficiency, filter= H
 #     JWST.csv             JPL Horizons observer vectors
 # Colours come from the shared colour.toml at the root ("H-g" = -1.7:
 # m_r = m_F150W2 + 1).
@@ -23,8 +26,10 @@ model_band = "r"
 colour_file = "colour.toml"
 surveys = ["jwst_sample_a"]
 paper_reference_jd = 2459974.5  # orbit-fit reference, not a visit
+# Fallback only: every .eff has its own rate_cut= line (1.4 "/hr binds at
+# epochs 2 and 3).
 rate_cut_min_arcsec_hr = 0.03
-rate_cut_max_arcsec_hr = 8.66
+rate_cut_max_arcsec_hr = 1.4
 detections_relpath = "characterization/jwst_sample_a/jwst_sample_a.csv"
 detections_full_name = "characterization/jwst_sample_a/jwst_sample_a.detections-full"
 results_name = "characterization/jwst_sample_a/jwst_sample_a.bias.csv"

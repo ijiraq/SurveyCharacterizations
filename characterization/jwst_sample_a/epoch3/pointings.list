@@ -1,5 +1,25 @@
-# JWST GO 1568 Sample A, epoch 3: CADC shift-and-stack midpoint of visit 3.
-# Eduardo et al. 2026 0.05 deg^2 mosaic as a square centred on the ICRS
-# field centre 13:57:33 -10:51:55; fill factor 1.
-# width height RA Dec JD fill observer efficiency
-0.2236068 0.2236068 209.3875 -10.865278 2459979.90854 1.0 JWST.csv jwst_sample_a.eff
+# JWST GO 1568 Sample A, epoch 3 (observation 003); written by ../make_pointings.py
+# from ../footprints.csv. Outline of the three NIRCam SW strips (2.19, 4.16, 2.19' wide, PA 157.2 deg in RA cos(dec), Dec),
+# 178.9 arcmin^2 with the two module gaps excluded. Fill 0.91: 0.905 of the outline was imaged by
+# one SW detector in both dithers, more than 15 pixels from its edge (README.md: a three-epoch
+# simulation of the detector polygons gives 0.913). JD: middle of the 20-tile epoch.
+# poly n ra dec jd fill observer efficiency; then n lines dx dy [deg], dx = dRA cos(dec)
+poly 18 209.3904703 -10.8651581 2459979.90857 0.91 JWST.csv jwst_sample_a.eff
+  -0.1929865 -0.0091899
+  +0.1284983 -0.1440999
+  +0.1426257 -0.1104200
+  +0.1472592 -0.0993737
+  +0.1474655 -0.0994602
+  +0.1743152 -0.0354479
+  -0.1468192 +0.0992654
+  -0.1421859 +0.1103070
+  +0.1789443 -0.0243996
+  +0.1930655 +0.0092683
+  -0.1285767 +0.1441749
+  -0.1426981 +0.1105222
+  -0.1473315 +0.0994806
+  -0.1473638 +0.0994942
+  -0.1742134 +0.0355109
+  +0.1467469 -0.0991590
+  +0.1421135 -0.1102053
+  -0.1788592 +0.0244748
