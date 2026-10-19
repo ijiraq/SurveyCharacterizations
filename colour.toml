@@ -8,7 +8,7 @@
 # gives r - H = 1.0, i.e. m_r = m_F150W2 + 1 as in the paper; ossssim's
 # built-in 2MASS H colour is r - H = 0.9.
 #
-# HST ACS F606W in STMAG (N26) is labelled t: neither r nor w.
+# HST ACS F606W in STMAG (N26) is labelled t: 
 # t = STMAG_F606W = r_AB + 0.3, so "t-g" = "r-g" + 0.3.
 #
 # A detection's spectral group is chosen from its comp value: the first
