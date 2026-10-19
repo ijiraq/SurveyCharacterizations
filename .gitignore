@@ -14,3 +14,4 @@ characterization/*/plants_*.npz
 characterization/*/eps_*.csv
 # ossssim writes its planetary ephemeris cache to the working directory
 Rebound_Archive*.bin
+joint/joint_*/

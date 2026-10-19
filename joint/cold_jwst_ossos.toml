@@ -1,0 +1,37 @@
+# Joint cold-classical H-distribution fit: JWST Sample A + OSSOS v11.
+#
+#   survey_debias_eff --root .. --survey OSSOS_v11 --model <Classical-ModelUsed.dat> \
+#       --i-max 5 --exclude-block 2015BS
+#   survey_debias_eff --root .. --survey jwst_sample_a --model <Classical-ModelUsed.dat> \
+#       --i-max 5.0001 --r-min 38 --r-max 55 --overlap-with OSSOS_v11
+#   survey_debias_joint --config cold_jwst_ossos.toml
+#
+# The eps cuts are the samples' cuts: OSSOS cla m with i < 5 deg, JWST
+# comp = cold (38 < d < 55 au, i <= 5 deg). 2015BS is left out: its .eff
+# rate_cut (-23 +/- 22 deg) rejects the motion of its own detections
+# (about -53 deg in ossssim), so ossssim recovers 1 of 30 of them.
+
+[joint]
+name = "JWST Sample A + OSSOS v11, cold classicals"
+root = ".."
+colour_file = "colour.toml"
+colour_group = "cold"
+model_band = "r"
+eps_tag = "cold"
+sigma_delta = 0.05
+sigma_c = 0.2
+priority = ["OSSOS_v11", "jwst_sample_a"]
+duplicates = "Duplicates"
+
+[[survey]]
+name = "jwst_sample_a"
+format = "csv"
+detections = "characterization/jwst_sample_a/jwst_sample_a.csv"
+columns = { mag = "m_f150w2", d_bary = "d_bary", name = "name" }
+select = { comp = "cold" }
+
+[[survey]]
+name = "OSSOS_v11"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+exclude_blocks = ["2015BS"]
