@@ -31,13 +31,15 @@ check_detected_title = "detected flag≥4 (single 15-day stack)"
 bias_method = "aq_grid"
 
 # Program name = column in the detections table. These are the columns read.
-# aq_grid requires mag, a, d_bary, e or q, and i or ifree.
+# aq_grid requires mag, a, d_bary, e or q, and i or ifree. ifree is Napier's
+# Huang et al. (2022) value; a blank cell falls back to ifree from i and a.
 [detection_columns]
 mag = "m_stmag"
 name = "name"
 a = "a"
 e = "e"
 i = "i"
+ifree = "ifree"
 d_bary = "d_bary"
 comp = "comp"
 

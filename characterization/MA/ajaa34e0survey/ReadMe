@@ -1,0 +1,45 @@
+================================================================================
+Title: A Carefully Characterized and Tracked Trans-Neptunian Survey; the 
+       Size-Distribution of the Plutinos and the Number of Neptunian Trojans. 
+Authors: Alexandersen M., Gladman B., Kavelaars J., Petit J.-M., Gwyn S.D.J., 
+         Shankman C.J., Pike R.E. 
+================================================================================
+Code names: CoorbModel.f, Res31Model.f, Res32Model.f, and Res41Model.f
+
+Language: FORTRAN
+
+Code tested under the following compilers/operating systems:
+
+Description of input data: e.g. param*.txt
+
+Description of output data: e.g. KRQ11hot_resaei_100Myr_incfix.out
+
+System requirements: 
+
+Calls to external routines: 
+
+Additional comments: These are the model scripts used in 
+  Alexandersen et al. 2016 to simulate survey observations of various 
+  populations. The .f files are the model scripts which generate simulated 
+  objects, which are passed to the survey simulator to test whether
+  they are detectable. The param*.txt files are parameter files read by the 
+  model (allowing multiple parametrically similar models to be tested without 
+  recompiling).  runme.sh is provided purely as an example of one of the many 
+  bash scripts used to run the survey simulator - this can be done in-line.
+  KRQ11hot_resaei_100Myr_incfix.out is the output of the simulations from 
+  Alexandersen et al. 2013, which was used as input as the scattering component 
+  in the co-orbital+scattering model.
+
+================================================================================
+The AAS gives permission to anyone who wishes to use these subroutines
+to run their own calculations.  Permission to republish or reuse these
+routines should be directed to the Executive Officer of the AAS.
+
+Note that the AAS does not take responsibility for the content of the 
+source code.  Potential users should be wary of applying the code
+to conditions that the code was not written to model and the accuracy of
+the code may be affected when compiled and executed on different systems.
+================================================================================
+
+
+MA11l12h/

@@ -1,0 +1,12 @@
+10.0	! Sigma inclination
+-1.d0	! Smallest absolute magnitude
+8.40d0	! Absolute magnitude at knee
+10.00d0	! Largest absolute magnitude
+0.90	! B-Slope of bright H distribution
+0.90	! F-Slope of faint H distribution
+1.00	! Contrast of H distribution at knee
+0.12	! Sigma eccentricity (not used, artifact)
+0.10d0 0.90d0   ! Fraction symmetric and asymmetric
+0.50d0 0.50d0	! Fraction leading asym and trailing asym
+ 0.50d0 0.0d0 -0.50d0 -1.0d0 1.5d0 1.2d0  0.8d0 -0.1d0 -0.5d0 0.70d0	! Colors
+.false.	! Should we log the generated orbits ?

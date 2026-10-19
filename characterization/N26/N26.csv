@@ -1,4 +1,5 @@
 name,m_stmag,a,e,i,d_bary,ifree,comp,notes
+2003BG91,26.76,43.4,0.099,2.45,40.28,2.95,cold,B04 bright search; m = B04 26.95 - 0.19 (mean Napier-B04 offset on BF91/BH91); a/e/i JPL SBDB 92-day arc; d_bary Horizons at stack midpoint; ifree from Laplace-plane approx (Omega=176)
 2003BF91,27.99,42.7,0.014,1.50,42.19,1.35,cold,Napier Table 1+2; a,e are a_min,e_min
 2003BH91,28.16,43.9,0.031,2.00,42.59,0.55,cold,Napier Table 1+2; a,e are a_min,e_min
 2003ABCD,28.99,47.5,0.026,2.00,48.95,0.51,cold,new in Napier 2026; a,e are a_min,e_min

@@ -8,13 +8,19 @@
 # See README.format and/or Template.eff for a description of the format of this
 # file.
 #
+# MA low-lat block (mal), Alexandersen et al. 2016, AJ 152, 111: the
+# supplementary MA11l12h/ma11la.eff. The last two rate ranges were written
+# "rates:" there; the simulator skips lines without '=', so the two fits that
+# follow overwrote the 3.72-5.38 range and rates above 5.38 had no efficiency.
+# They are written "rates=" here. See README.md.
+#
 rate_cut= 0.50   10.00   -21.050    15.62
 #
 mag_error= 0.013 0.17 24.9 0.5 24.2 -0.2
 #
-phot_frac= 0.026 0.156 0.818
+phot_frac= 1.000 0.000 0.000
 #
-track_frac= 1.000 24.421 -2.453
+track_frac= 1.000 24.52 -3.333
 #
 filter= r
 #
@@ -39,14 +45,14 @@ square_param=   0.901384294       1.02973068E-02   24.5602989      0.146653786
 # Limiting magnitude of the block
 mag_lim= 24.57
 #
-rates=  5.38  6.40                                                            
+rates=  5.38  6.40
 function= square
 square_param=   0.993546128       4.81119640E-02   24.5993443     6.69738501E-02
 # Goodness of fit (reduced chi^2):   1.300
 # Limiting magnitude of the block
 mag_lim= 24.42
 #
-rates=  6.40 10.00                                                            
+rates=  6.40 10.00
 function= square
 square_param=   0.786008000       1.34810088E-02   24.3750610      0.137408525
 # Goodness of fit (reduced chi^2):   0.796

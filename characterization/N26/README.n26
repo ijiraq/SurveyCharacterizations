@@ -29,7 +29,7 @@ N26
            \                            TDB at 1 minute steps
             \- HST.jpl_batch            The Horizons batch request that
                                         produced HST.csv
-   \---------- N26.csv                  The four detected objects (CSV)
+   \---------- N26.csv                  The five detected objects (CSV)
     \--------- N26.toml                 survey_debias configuration
 
 Where the values come from:
@@ -46,15 +46,47 @@ Where the values come from:
   at 29.2 STMAG. It is not fitted to the HST photometry.
 - rate_cut = 0.05-6.4 "/hr, isotropic: the cone of the OSSSSim HST example
   (examples/Surveys/HST/HST.eff). Napier searches barycentric CCKBO
-  trajectories and corrects HST parallax in the stack; this cut is the
-  on-sky rate at the 15-day midpoint, not the LEO parallax loops.
+  trajectories and corrects HST parallax in the stack; the simulator's
+  rate is the 2 h motion from HST.csv at the 15-day midpoint.
 - Pointing: field centre and mosaic size of the Bernstein et al. 2004
   GO-9433 field; the epoch is the 15-day stack midpoint.
-- Detections (N26.csv): name, m_stmag, a, e, i, d_bary, ifree from Napier
-  Tables 1 and 2. a and e are a_min and e_min. 2003 BF91 and 2003 BH91 are
-  the Bernstein et al. objects; 2003 ABCD and 2003 WXYZ are new in Napier.
-  FV53 and BG91 were visible in single exposures and were not part of this
-  search, so they are not in the characterized sample.
+- Detections (N26.csv): the survey is the union of the Bernstein et al.
+  single-exposure ("bright") search and the Napier heliostack ("faint")
+  search. The heliostack masks every >4 sigma pixel in each exposure, so it
+  cannot find objects visible in a single 400 s exposure (m <~ 27.6); those
+  are covered by the B04 bright search, which is 100% complete there.
+  - 2003 BF91, BH91 (B04 discoveries) and 2003 ABCD, WXYZ (new in Napier):
+    m_stmag, i, d_bary, ifree from Napier Tables 1 and 2; a and e are a_min
+    and e_min.
+  - 2003 BG91: a B04 discovery from the bright search, detected in both the
+    discovery and recovery epochs and recovered at Keck. Napier saw it but
+    did not measure it. m_stmag = B04 <m> 26.95 shifted by -0.19, the mean
+    Napier - B04 offset on BF91 and BH91; a, e, i from JPL SBDB (92-day arc);
+    d_bary from Horizons at the stack midpoint; ifree from the survey_debias
+    Laplace-plane approximation with Omega = 176.
+  - 2000 FV53 is excluded: it is the object the field was placed on.
+- Effective area: pointings.list is the nominal 400" x 600" footprint at the
+  stack midpoint with fill 1. Two known approximations:
+  - The mosaic is aligned to the ecliptic (B04 Sec. II.1), i.e. at PA 19.7
+    deg in ICRS, but rect is axis-aligned in RA/Dec. Area is unchanged; only
+    the corners differ. A poly entry would represent it exactly.
+  - Over the 15-day span a CCKBO moves ~40-45" in ecliptic longitude and
+    +/-15-20" in latitude (Horizons tracks of BF91 and BG91), so objects
+    near the outer edges get fewer exposures in the full stack. A crude
+    model of the 2x3 mosaic and visit pattern gives 86% of the footprint
+    with full coverage, and an area-weighted efficiency 1.5% below Napier's
+    eta at m < 28, 5% at 28.8, and 9% at m50. We assume Napier's efficiency
+    counts every implanted source that landed on a pixel, so eta already
+    includes this loss and the nominal footprint is the right area (to be
+    confirmed with K. Napier). B04's 0.019 deg^2 counts an object as in the
+    field if it is imaged in >= 3 visits of the discovery epoch, so it does
+    not apply to the 15-day stack.
+- rate_cut: at the stack midpoint the field is at its stationary point and
+  the simulated 2 h rate is 0.06-0.24 "/hr for cold orbits at 35-70 au, so
+  0.05-6.4 "/hr imposes no outer distance limit (see N26.eff).
+- Napier's search grid is restricted to a in [42.4, 47.4] au, e in [0, 0.2],
+  ecliptic i in [0, 5] deg, r in [38, 51] au. The faint-search efficiency
+  applies only inside that range; rate_cut does not encode it.
 
 These files were moved here from hst-tno-followup/characterization/ and
 hst-tno-followup/data/n26_detections.csv. The .eff file there was in r_AB

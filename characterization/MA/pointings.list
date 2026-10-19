@@ -3,7 +3,7 @@
 # All lines starting with '#' are ignored, so they are used for comments
 #
 # Each data line has the format:
-# <width> <height> <RA> <DEC> <epoch> <filling_factor> <tracked_fraction> \
+# <width> <height> <RA> <DEC> <epoch> <filling_factor> \
 #   <obs_code> <efficiency_file_name>
 #
 # <width>: width of FOV, in degree
@@ -15,7 +15,18 @@
 # <obs_code>: observatory code
 # <efficiency_file_name>: name of efficiency file for that pointing
 #
- 4.887  1.990 01:51:08.00 +15:51:48.0 2455860.843750 0.916 500 ma11la.eff
- 4.922  1.990 01:51:08.00 +13:54:00.0 2455858.963195 0.912 500 ma11la.eff
- 1.993  2.984 01:41:01.70 +28:10:00.0 2456220.904167 0.907 500 ma12ha.eff
- 1.993  2.984 01:49:58.30 +28:10:00.0 2456221.947917 0.907 500 ma12ha.eff
+# Alexandersen et al. 2016 (A16), supplementary MA11l12h/pointings.list.
+#
+# Low-lat block, as in the supplement
+ 4.914  0.995 01:51:08.00 +14:23:36.0 2455858.963195 0.912 500 ma11la.eff
+ 4.930  0.995 01:51:08.00 +13:24:48.0 2455858.963195 0.909 500 ma11la.eff
+ 4.878  0.995 01:51:08.00 +16:21:12.0 2455860.843750 0.916 500 ma11la.eff
+ 4.896  0.995 01:51:08.00 +15:22:24.0 2455860.843750 0.915 500 ma11la.eff
+#
+# High-lat block. Sizes, JDs and fill are the supplement's. The centres are
+# from the CADC MegaPrime CCD footprints of the discovery triplets: the
+# supplement and A16 Table 1 put them at 01:41:01.70 and 01:49:58.30,
+# +28:10:00, which is 0.98 deg east and 9' north of where the fields and the
+# mah detections are.
+ 1.993  2.984 01:36:35.90 +28:01:04.0 2456220.904167 0.907 500 ma12ha.eff
+ 1.993  2.984 01:45:26.80 +28:01:04.0 2456221.947917 0.907 500 ma12ha.eff

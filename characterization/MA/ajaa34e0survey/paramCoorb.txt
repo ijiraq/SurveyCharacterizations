@@ -1,0 +1,15 @@
+15.0	! Sigma inclination
+0.0d0	! Smallest absolute magnitude
+8.40d0	! Absolute magnitude at knee
+15.00d0	! Largest absolute magnitude
+0.95	! B-Slope of bright H distribution
+0.95	! F-Slope of faint H distribution
+1.00	! Contrast of H distribution at knee
+0.12	! Sigma eccentricity
+0.004d0 0.028d0 0.968d0	! Fraction of Uranians, Neptunians, scatterers
+0.640d0 0.260d0		! Fraction of Uranians Horseshoes, Trojans, Quasis
+0.540d0 0.360d0		! Fraction of Neptunian Horseshoes, Trojans, Quasis
+32867	! Number of lines in Scattering Object File
+KRQ11hot_resaei_100Myr_incfix.out	! File to read Scattering Objects from
+ 0.50d0 0.0d0 -0.50d0 -1.0d0 1.5d0 1.2d0  0.8d0 -0.1d0 -0.5d0 0.70d0	! Colors
+.false.	! Should we log the generated orbits ?

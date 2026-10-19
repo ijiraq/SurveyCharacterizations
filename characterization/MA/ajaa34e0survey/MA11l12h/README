@@ -1,0 +1,7 @@
+We here supply the following files:
+ma11la.eff
+ma12ha.eff
+pointings.list
+
+These contain the characterisation information for the survey described in Alexandersen et al. 2016. 
+Additional surveys/fields (such as CFEPS) can be added by creating the appropriate .eff files and adding the field information to pointings.list. 

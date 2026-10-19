@@ -1,8 +1,14 @@
 # N26 single-stack detection efficiency.
 # Napier et al. 2026, Planet. Sci. J. 7, 117 (arXiv:2604.16731)
 # heliostack reanalysis of Bernstein et al. 2004 (AJ 128, 1364), HST GO-9433
-# ACS WFC F606W. Four objects (2003 BF91, BH91, ABCD, WXYZ). FV53/BG91
-# were visible in single exposures and were not part of this search.
+# ACS WFC F606W. Five detections: 2003 BF91, BH91, ABCD, WXYZ from the
+# Napier stack and 2003 BG91 from the Bernstein et al. single-exposure
+# search. The targeted object 2000 FV53 is excluded.
+#
+# The heliostack masks every >4 sigma pixel in each exposure, so objects
+# bright enough to be seen in a single 400 s exposure (m <~ 27.6) are found
+# only by the Bernstein et al. bright search, which is 100% complete there.
+# eta0 = 1 at the bright end therefore describes the union of both searches.
 #
 # Photometry: every magnitude in this file is Napier's catalog STMAG_F606W,
 # filter letter t. t is neither r nor w: colour.toml carries
@@ -15,8 +21,13 @@
 #   Angle 0, half-width 180: Detos1 atan2 is in [-180, 180]; a non-wrapped
 #   centre equal to the field RA rejects pre-turnaround PAs (see JWST .eff).
 #   Napier searches barycentric CCKBO trajectories and corrects HST parallax
-#   in the stack; this cut is the on-sky rate at the 15-day midpoint, not
-#   the LEO parallax loops.
+#   in the stack. The simulator's rate is the 2 h motion from HST.csv at the
+#   15-day midpoint, when the field is at its stationary point: i < 5 deg,
+#   e < 0.2 orbits at 35-70 au give 0.06-0.24 "/hr (Horizons: BF91 0.161,
+#   BG91 0.160), and i < 40 deg, e < 0.4 at 35-70 au give 0.01-0.63 "/hr.
+#   Near the stationary point the rate barely depends on distance, so the cut
+#   sets no outer distance limit; it keeps everything from ~30 au out
+#   (beyond Napier's r = 51 au grid edge to at least 55 au).
 #
 rate_cut= 0.05 6.4 0.0 180.0
 #

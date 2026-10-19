@@ -1,0 +1,133 @@
+================================================================================
+Title: A Carefully Characterized and Tracked Trans-Neptunian Survey; the
+       Size-Distribution of the Plutinos and the Number of Neptunian Trojans.
+Authors: Alexandersen M., Gladman B., Kavelaars J., Petit J.-M., Gwyn S.D.J.,
+         Shankman C.J., Pike R.E.
+================================================================================
+Description of contents: This package contains the following files.
+  CoorbModel.f
+  KRQ11hot_resaei_100Myr_incfix.out
+  param11.txt
+  param31.txt
+  param32-divot.txt
+  param32-exp.txt
+  param32-knee.txt
+  param41.txt
+  paramCoorb.txt
+  Res11Model.f
+  Res31Model.f
+  Res32Model.f
+  Res41Model.f
+  MA11l12h/
+  MA11l12h/ma11la.eff
+  MA11l12h/ma12ha.eff
+  MA11l12h/pointings.list
+  MA11l12h/README
+
+Code names: CoorbModel.f, Res11Model.f, Res31Model.f, Res32Model.f, and Res41Model.f
+
+Language: FORTRAN
+
+Code tested under the following compilers/operating systems:
+  Fedora Core 3, Ubuntu 12.04, Ubuntu 14.04, Ubuntu 16.04, Mac OS X. 
+  ifort, gfortran
+
+Description of code: 
+  These models are designed to work with a heavily modified version of the 
+  CFEPS survey simulator that will eventually be released publically (rebranded
+  as the OSSOS survey simulator) at http://www.ossos-survey.org/simulator.html 
+  The model files all function in a similar way. They generate one simulated 
+  object at a time, according to some model distributions, and returns that 
+  object. Each object will have six orbital parameters, an absolute magnitude 
+  and a colour array. The model distributions used here have been found to be 
+  acceptable when biased and compared to real detections. 
+
+  The Models are:
+  CoorbModel.f - A model of the scattering a<34 AU population as well as the 
+                 temporary co-orbitals of Neptune and Uranus. 
+  Res11Model.f - A model of the stable Trojans (1:1 resonance) of Neptune
+  Res31Model.f - A model of the 3:1 outer mean motion resonance with Neptune
+  Res32Model.f - A model of the Plutinos (3:2 outer resonance)
+  Res41Model.f - A model of the 4:1 resonance.
+
+Description of input data: e.g. param*.txt
+
+  Each population model needs a param*.txt parameter file as input, as well
+  as a random number generator seed. The parameter file allows you to
+  change many important parameters without needing to recompile code.
+  Common to all the parameter files are the ability to change the width of
+  the inclination distribution, the limits and parameters of the absolute
+  H-magnitude distribution (parameters allowing for any single exponential, a
+  knee or a divot), the width of the eccentricity distribution, the colour
+  terms between various filter bands, and whether or not generated objects
+  should be saved (use with care - A LOT more objects are generated than are
+  detected, so the file quickly gets big).  Some of the models require
+  additional parameters in the param file, such as maximum/mean libration
+  amplitude, symmetric fraction, fraction of asymmetric objects that are
+  leading/trailing, the mean eccentricity (for populations that have an
+  offset), fraction of objects in kozai resonance, kozai parameters, fraction
+  of scattering objects that are temporarily co-orbital, etc.  All required
+  parameters are labelled in the param files.  The parameter files are:
+  param11.txt - An example parameter file for Res11Model.f param31.txt - An
+  example parameter file for Res31Model.f param32-divot.txt - Example
+  parameter file for Res32Model.f with example of a divot H-distribution
+  param32-exp.txt - Example parameter file for Res32Model.f with example of a
+  single exponential H-distribution param32-knee.txt - Example parameter file
+  for Res32Model.f with example of a knee H-distribution param41.txt -
+  Example parameter file for Res41Model.f paramCoorb.txt - Example parameter
+  file for CoorbModel.f CoorbModel.f aditionally requires the inputfile
+  KRQ11hot_resaei_100Myr_incfix.out; this contains the output of the
+  simulations from Alexandersen et al. 2013, which was used as input as the
+  scattering component in the co-orbital+scattering model.
+
+Description of output data: 
+
+  The models provide a function, GiMeObj, which returns all variables to
+  define an object and its orbit: semi-major axis, eccentricity,
+  inclination, longitude of ascending node, argument of pericentre, mean
+  anomaly, epoch, absolute magnitude, colour array*, opposition surge
+  factor, phase of lightcurve at epoch, period of lightcurve, amplitude of
+  lightcurve**, a comment string, the number of characters to use from the
+  comment string, and an error flag.
+  *=(g-x, r-x, i-x, z-x, u-x, V-x, B-x, R-x, I-x, where x is whichever band
+  you prefer/define in the param file - colours for bands that no survey was
+  conducted in are irrelevant) **=to ignore lightcurve effects, simply set
+  the amplitude to zero in the model (don't set the period to 0).
+
+  Calling sequence: 
+  call GiMeObj(filena, seed, a, e, inc, node, peri, M, epoch, h, color, gb, ph,
+  c  period, amp, comp, ierr) filena is the filename of the parameter file, 
+  seed is a random number generator seed, and the rest are the variables 
+  described above in the description of output data (in same order). 
+  
+System requirements: A Fortran compiler, some kind of text editor. 
+
+Calls to external routines: pos_cart converts orbital elements to cartesian 
+  coordinates.  zero2pi converts a number to be in the range 0 to 2*pi (so 
+  is the same as the number modulo 2*pi) incdism returns a random number from 
+  a distribution as defined by the parameters passed into it.  We do not have 
+  the rights to publically release these functions, however they are all very 
+  simple functions that can easily be substituted. The functions used here 
+  will be in the OSSOS survey simulator release.  
+
+Additional comments: These are the model scripts used in
+  Alexandersen et al. 2016 to simulate survey observations of various
+  populations. The .f files are the model scripts which generate simulated
+  objects, which are passed to the survey simulator to test whether
+  they are detectable. The param*.txt files are parameter files read by the
+  model (allowing multiple parametrically similar models to be tested without
+  recompiling). 
+  KRQ11hot_resaei_100Myr_incfix.out is the output of the simulations from
+  Alexandersen et al. 2013, which was used as input as the scattering component
+  in the co-orbital+scattering model.
+
+================================================================================
+The AAS gives permission to anyone who wishes to use these subroutines
+to run their own calculations.  Permission to republish or reuse these
+routines should be directed to the Executive Officer of the AAS.
+
+Note that the AAS does not take responsibility for the content of the
+source code.  Potential users should be wary of applying the code
+to conditions that the code was not written to model and the accuracy of
+the code may be affected when compiled and executed on different systems.
+================================================================================
