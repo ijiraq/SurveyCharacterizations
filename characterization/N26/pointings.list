@@ -1,0 +1,4 @@
+# N26 heliostack: the 6-tile 400" x 600" ACS/WFC mosaic of HST GO-9433
+# (Bernstein et al. 2004), one rectangle at the 15-day stack midpoint.
+# rect width height [deg]  RA Dec  JD  fill  observer  efficiency
+rect 0.1111111 0.1666667 14:07:53.33 -11:21:38 2452672.8585 1.0 HST.csv N26.eff

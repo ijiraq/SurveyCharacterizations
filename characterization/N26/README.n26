@@ -1,0 +1,66 @@
+
+--------------------------------------------------------------------------------
+
+This directory contains the pointing, efficiency function, observer ephemeris
+and detections of the N26 HST heliostack: the Napier et al. (2026, Planet.
+Sci. J. 7, 117; arXiv:2604.16731) reanalysis of the Bernstein et al. (2004,
+AJ 128, 1364) HST GO-9433 ACS/WFC F606W field as a single 15-day heliostack.
+It is a single-epoch survey (one stack), not a multi-epoch AND.
+
+Photometry is HST ACS F606W in STMAG, filter letter t (not r, not w):
+
+    t = STMAG_F606W = r_AB + 0.3
+
+so colour.toml has "t-g" = "r-g" + 0.3 in every spectral group. The 0.3 mag
+ST->AB conversion is the one adopted for this survey; the Napier vs Bernstein
+zeropoint offset on the two objects in both catalogs is ~0.2 mag.
+
+The content of this directory is:
+
+N26
+   \---------- README.n26 (this file)   Describes the content of the directory
+    \--------- pointings.list           One rectangle: the 6-tile 400" x 600"
+     \                                  ACS/WFC mosaic at 14:07:53.33
+      \                                 -11:21:38, JD 2452672.8585 (stack
+       \                                midpoint), fill factor 1
+        \----- N26.eff                  Detection efficiency, filter= t
+         \---- HST.csv                  JPL Horizons barycentric ICRF vectors
+          \                             of HST (-48), 2003-Feb-02 06:00-14:00
+           \                            TDB at 1 minute steps
+            \- HST.jpl_batch            The Horizons batch request that
+                                        produced HST.csv
+   \---------- N26.csv                  The four detected objects (CSV)
+    \--------- N26.toml                 survey_debias configuration
+
+Where the values come from:
+
+- Efficiency (N26.eff): Napier Eq. 20 logistic
+      eta = eta0 / (1 + exp((m - m50)/sigma)),
+      eta0 = 1.0, m50 = 29.21 +/- 0.03 STMAG, sigma = 0.11 +/- 0.02,
+  written as the OSSSSim single tanh A/2 (1 - tanh((m - M0)/w)) with
+  A = eta0, M0 = m50 = 29.21, w = 2 sigma = 0.22. The tracking fraction is 1
+  (the characterized sample is the stack itself) with the same knee.
+- mag_lim = 29.80: Napier's implant faint limit is 29.7 STMAG (Sec. III.1);
+  0.1 mag of headroom keeps mag_lim off the efficiency knee.
+- mag_error: the OSSOS photometric-scatter template shifted so the knee is
+  at 29.2 STMAG. It is not fitted to the HST photometry.
+- rate_cut = 0.05-6.4 "/hr, isotropic: the cone of the OSSSSim HST example
+  (examples/Surveys/HST/HST.eff). Napier searches barycentric CCKBO
+  trajectories and corrects HST parallax in the stack; this cut is the
+  on-sky rate at the 15-day midpoint, not the LEO parallax loops.
+- Pointing: field centre and mosaic size of the Bernstein et al. 2004
+  GO-9433 field; the epoch is the 15-day stack midpoint.
+- Detections (N26.csv): name, m_stmag, a, e, i, d_bary, ifree from Napier
+  Tables 1 and 2. a and e are a_min and e_min. 2003 BF91 and 2003 BH91 are
+  the Bernstein et al. objects; 2003 ABCD and 2003 WXYZ are new in Napier.
+  FV53 and BG91 were visible in single exposures and were not part of this
+  search, so they are not in the characterized sample.
+
+These files were moved here from hst-tno-followup/characterization/ and
+hst-tno-followup/data/n26_detections.csv. The .eff file there was in r_AB
+(filter= r, every magnitude 0.3 brighter than here); it is now in native
+STMAG so it matches the m_stmag detections.
+
+See CFEPS_g/README.formats for the format of a survey "block".
+
+--------------------------------------------------------------------------------
