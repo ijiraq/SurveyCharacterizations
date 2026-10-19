@@ -1,0 +1,52 @@
+# Joint cold-classical H-distribution fit: OSSOS v11 + CFEPS (r, g) + JWST Sample A.
+#
+# eps tables (model = OSSOS 1.0 Classical-ModelUsed.dat, cold components):
+#   survey_debias_eff --root .. --survey OSSOS_v11 --model M --i-max 5 --exclude-block 2015BS
+#   survey_debias_eff --root .. --survey CFEPS_r --model M --i-max 5 --overlap-with OSSOS_v11
+#   survey_debias_eff --root .. --survey CFEPS_g --model M --i-max 5 \
+#       --exclude-block L3s-smooth --exclude-block L3f-smooth \
+#       --overlap-with OSSOS_v11 --overlap-with CFEPS_r
+#   survey_debias_eff --root .. --survey jwst_sample_a --model M --i-max 5.0001 \
+#       --r-min 38 --r-max 55 --overlap-with OSSOS_v11 --overlap-with CFEPS_r \
+#       --overlap-with CFEPS_g
+#
+# Blocks whose characterization recovers <30% of their own release objects
+# (survey_debias_eff --check-detections; the rate_cut angle rejects their
+# motion) are left out: OSSOS 2015BS, CFEPS L3s-smooth and L3f-smooth.
+# Objects found by several surveys are kept in the first of `priority`.
+
+[joint]
+name = "OSSOS v11 + CFEPS r, g + JWST Sample A, cold classicals"
+root = ".."
+colour_file = "colour.toml"
+colour_group = "cold"
+model_band = "r"
+eps_tag = "cold"
+sigma_delta = 0.05
+sigma_c = 0.2
+priority = ["OSSOS_v11", "CFEPS_r", "CFEPS_g", "jwst_sample_a"]
+duplicates = "Duplicates"
+
+[[survey]]
+name = "OSSOS_v11"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+exclude_blocks = ["2015BS"]
+
+[[survey]]
+name = "CFEPS_r"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "CFEPS_g"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+exclude_blocks = ["L3s-smooth", "L3f-smooth"]
+
+[[survey]]
+name = "jwst_sample_a"
+format = "csv"
+detections = "characterization/jwst_sample_a/jwst_sample_a.csv"
+columns = { mag = "m_f150w2", d_bary = "d_bary", name = "name" }
+select = { comp = "cold" }
