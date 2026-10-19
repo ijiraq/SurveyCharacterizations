@@ -16,8 +16,10 @@ ROOT = Path(__file__).resolve().parents[1]
 CHAR = ROOT / "characterization"
 NAME = "jwst_sample_a"
 SURVEY = CHAR / NAME
-# Copied verbatim from SurveySimulator-Data/Characterizations (single epoch).
-SSDATA_SURVEYS = ("CFEPS", "OSSOS-MA", "All_Surveys", "All_r_Surveys", "Deep_Surveys")
+# Verbatim single-epoch characterizations: the OSSOS v11 release sets, and
+# OSSOS-B from the OSSOS First Data Release (Bannister et al. 2016).
+VERBATIM_SURVEYS = ("CFEPS", "OSSOS-MA", "All_Surveys", "All_r_Surveys", "Deep_Surveys",
+                    "OSSOS-B")
 EPOCH_JD = (2459969.32118, 2459973.96785, 2459979.90854)
 FIELD_RA, FIELD_DEC = 209.3875, -10.865278
 SIDE_DEG = math.sqrt(0.05)
@@ -125,9 +127,9 @@ class LayoutTest(unittest.TestCase):
             self.assertIn(col, rows[0])
 
 
-class SurveySimulatorDataLayoutTest(unittest.TestCase):
+class VerbatimSurveyLayoutTest(unittest.TestCase):
     def test_single_epoch_survey_roots(self):
-        for name in SSDATA_SURVEYS:
+        for name in VERBATIM_SURVEYS:
             with self.subTest(survey=name):
                 d = CHAR / name
                 rows = pointing_rows(d / "pointings.list")
@@ -141,7 +143,7 @@ class SurveySimulatorDataLayoutTest(unittest.TestCase):
     def test_filters_have_colours(self):
         with (ROOT / "colour.toml").open("rb") as fh:
             colours = tomllib.load(fh)
-        for name in SSDATA_SURVEYS:
+        for name in VERBATIM_SURVEYS:
             for eff in (CHAR / name).glob("*.eff"):
                 filt = read_keyed(eff).get("filter")
                 if filt:
@@ -169,10 +171,10 @@ class SimulatorTest(unittest.TestCase):
         self.assertEqual(len(s), 3)
         self.assertEqual({p.key for p in s}, {f"{NAME}/{NAME}"})
 
-    def test_surveysimulator_data_loads_as_single_epoch(self):
+    def test_verbatim_surveys_load_as_single_epoch(self):
         from ossssim import SurveyCharacterization
 
-        for name in SSDATA_SURVEYS:
+        for name in VERBATIM_SURVEYS:
             with self.subTest(survey=name):
                 s = SurveyCharacterization.from_directory(str(CHAR / name))
                 self.assertEqual(s.n_epochs, 1)
