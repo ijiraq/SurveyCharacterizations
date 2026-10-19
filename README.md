@@ -7,13 +7,14 @@ read by the OSSOS [SurveySimulator](https://github.com/ijiraq/SurveySimulator)
 
 | Directory | Survey | Epochs | Filters |
 |---|---|---|---|
-| `CFEPS/` | CFEPS detections and blocks (OSSOS v11 release) | 1 | g, r, R |
-| `OSSOS-MA/` | OSSOS plus the MA (mal, mah) blocks (v11) | 1 | r |
-| `All_Surveys/` | OSSOS, CFEPS, HiLat, and MA: the full v11 sample | 1 | g, r, R |
-| `All_r_Surveys/` | the r-band subset of `All_Surveys` (v11, no duplicates) | 1 | r |
-| `Deep_Surveys/` | the 2015 OSSOS blocks (v11) | 1 | r |
-| `OSSOS-B/` | OSSOS First Data Release, 2013–2014 blocks | 1 | r |
+| `CFEPS_g/` | the g-band CFEPS blocks (v11 release) | 1 | g |
+| `CFEPS_r/` | the CFEPS L3h block (v11 release) | 1 | r |
+| `CFEPS_presurvey/` | the CFEPS presurvey block (v11 release) | 1 | R |
+| `HiLat/` | the High Latitude survey (v11 release) | 1 | r |
+| `MA/` | the MA (mal, mah) blocks (v11 release) | 1 | r |
+| `OSSOS_v11/` | OSSOS, all blocks (v11 release) | 1 | r |
 | `jwst_sample_a/` | JWST GO 1568 Sample A (Eduardo et al. 2026) | 3 | H (F150W2) |
+| `N26/` | HST GO-9433 heliostack (Napier et al. 2026) | 1 | t (F606W STMAG) |
 
 All of them are under `characterization/`. Samples B and C of Eduardo et al.
 will follow the same layout as `jwst_sample_b` and `jwst_sample_c`.
@@ -30,10 +31,12 @@ directory and is named after it:
 
 ```text
 colour.toml                     colour table shared by every survey in a run
+Duplicates                      OSSOS and CFEPS designations of the 6 objects in both surveys
 characterization/
   __README__.txt                OSSOS v11 release notes
-  CFEPS/ OSSOS-MA/ All_Surveys/ All_r_Surveys/ Deep_Surveys/ OSSOS-B/
-                                single-epoch surveys: pointings.list, .eff, detections
+  CFEPS_g/ CFEPS_r/ CFEPS_presurvey/ HiLat/ MA/ OSSOS_v11/
+                                single-epoch surveys: pointings.list, .eff,
+                                <survey>.detections, optional <survey>.CDS
   jwst_sample_a/                multi-epoch survey root (no pointings.list of its own)
     jwst_sample_a.toml          survey_debias configuration
     jwst_sample_a.csv           detections (Eduardo et al. Sample A)
@@ -42,11 +45,20 @@ characterization/
       pointings.list            mosaic at the CADC shift-and-stack midpoint
       jwst_sample_a.eff         F150W2 detection efficiency (filter= H)
       JWST.csv                  JPL Horizons JWST barycentric vectors
+  N26/                          single-epoch survey with its own observer and config
+    README.n26                  where every value came from
+    N26.toml                    survey_debias configuration
+    N26.csv                     detections (Napier et al. Tables 1 and 2)
+    pointings.list              ACS/WFC mosaic at the 15-day stack midpoint
+    N26.eff                     F606W STMAG detection efficiency (filter= t)
+    HST.csv, HST.jpl_batch      JPL Horizons HST barycentric vectors and request
 ```
 
 - **Survey identity** is the directory name: detections are attributed to the
-  key `<survey>/<block>`, for example `CFEPS/L3h-smooth`, `OSSOS-B/2013AE` or
-  `jwst_sample_a/jwst_sample_a`.
+  key `<survey>/<block>`, for example `CFEPS_r/L3h-smooth`, `OSSOS_v11/2013AE`
+  or `jwst_sample_a/jwst_sample_a`.
+- **One survey per directory**: every `.eff` named in `pointings.list` is in
+  the same directory, and every `.eff` in the directory is named there.
 - **Multi-epoch surveys** have no `pointings.list` in the survey directory.
   `ossssim` loads every child directory that holds one as an epoch, and
   `survey.conf` sets `detections_required`, the number of epochs at which a
@@ -59,21 +71,19 @@ characterization/
 
 ## OSSOS v11 and CFEPS
 
-`CFEPS/`, `OSSOS-MA/`, `All_Surveys/`, `All_r_Surveys/` and `Deep_Surveys/`
-are verbatim copies of the OSSOS v11 release characterizations (see
-`characterization/__README__.txt`), kept under their original names so
-detection keys match other OSSOS work. Do not edit them.
+`CFEPS_g/`, `CFEPS_r/`, `CFEPS_presurvey/`, `HiLat/`, `MA/` and `OSSOS_v11/`
+split the OSSOS v11 release characterizations (see
+`characterization/__README__.txt`) into one directory per survey; CFEPS is
+split by filter. The `.eff` files, pointings and detection rows are those of
+the release, except that the six CFEPS objects re-detected by OSSOS carry
+their CFEPS designations in `CFEPS_g/` (the release used the OSSOS ones).
+Detection keys use the new directory names (for example `CFEPS_g/L3f-smooth`
+rather than the release's `CFEPS/L3f-smooth`).
 
-## OSSOS-B
-
-`OSSOS-B/` is the OSSOS First Data Release characterization: the 2013–2014
-blocks E, O, L and H with the detections released with Bannister et al.
-(2016), AJ 152, 70,
-[doi:10.3847/0004-6256/152/3/70](https://doi.org/10.3847/0004-6256/152/3/70).
-It is kept, unmodified, so the figures of that paper can be reproduced; for
-new work use the v11 sets, which supersede it. Its `.eff` files are identical
-to the v11 ones; its pointings and detection lists are those of the first
-release.
+The six re-detected objects are in both `CFEPS_g/` (CFEPS designation and
+circumstances) and `OSSOS_v11/` (OSSOS designation and circumstances);
+`Duplicates` maps one name to the other. A run that combines the two surveys
+counts them twice.
 
 ## JWST Sample A
 
@@ -90,6 +100,22 @@ release.
 F150W2 is labelled with the filter letter `H` (close to 2MASS H).
 `colour.toml` sets `"H-g" = -1.7`, so r − H = 1.0, i.e. m_r = m_F150W2 + 1
 as in the paper.
+
+## N26 (HST heliostack)
+
+| | |
+|---|---|
+| Field | 14:07:53.33 −11:21:38, 400″ × 600″ ACS/WFC mosaic |
+| Epoch (JD) | 2452672.8585, midpoint of the 15-day heliostack |
+| Detection | single stack |
+| Rates | 0.05–6.4 ″/hr, any direction |
+| Efficiency | 1.0/2 (1 − tanh((m − 29.21)/0.22)), F606W STMAG |
+| Magnitude limit | 29.8 (F606W STMAG) |
+
+F606W STMAG is labelled with the filter letter `t`: it is close to r but is
+neither r nor w. `colour.toml` sets `"t-g" = "r-g" + 0.3`, i.e.
+r_AB = STMAG − 0.3. Provenance of every number is in
+`characterization/N26/README.n26`.
 
 ## Installation
 

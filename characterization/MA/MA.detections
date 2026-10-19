@@ -1,4 +1,4 @@
-# File: OSSOS-MA_v11.detections
+# File: MA.detections
 #
 # cl p  j   k sh     object  mag e_mag Filt Hsur dist  e_dist    Nobs   time  av_xres av_yres max_x  max_y       a          e_a        e        e_e      i      e_i      Omega e_Omega    omega   e_omega      tperi    e_tperi   RAdeg   DEdeg      JD        rate   MPC  
 cen x  -1  -1 I       mah01 24.20 0.000 r 10.61  22.432   0.001   19    1.0429  0.084  0.107  0.359  0.288   30.072429     0.0028  0.259122  0.000159  53.886   0.001   20.010   0.001   34.380     0.195  57566.284     18.396  23.809  28.215 2456220.86078  6.11 K12UH7W

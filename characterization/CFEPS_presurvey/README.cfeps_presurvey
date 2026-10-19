@@ -1,0 +1,24 @@
+
+--------------------------------------------------------------------------------
+
+This directory contains the pointing history, efficiency function and list of
+detected objects for the CFEPS presurvey block (Jones et al. 2006, Icarus),
+observed in the R filter.
+
+The content of this directory is:
+
+CFEPS_presurvey
+   \---------- README.cfeps_presurvey (this file) Describes the content of
+    \                                   the directory
+     \-------- pointings.list           Pointing and time of the presurvey
+      \                                 block
+       \------ presurvey-smooth.eff     Efficiency function for the presurvey
+        \----- CFEPS_presurvey.detections List of objects really detected in
+                                        the presurvey (K02O/K02P designations),
+                                        with their dynamical class if known,
+                                        magnitude at detection, rate of motion,
+                                        H mag, and more.
+
+See CFEPS_g/README.formats for the format of a survey "block".
+
+--------------------------------------------------------------------------------

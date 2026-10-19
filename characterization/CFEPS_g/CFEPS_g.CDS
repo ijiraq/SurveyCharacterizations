@@ -1,6 +1,104 @@
-# File: CFEPS.detections
-#
-# cl p  j   k sh     object  mag e_mag Filt Hsur dist  e_dist    Nobs   time  av_xres av_yres max_x  max_y       a          e_a        e        e_e      i      e_i      Omega e_Omega    omega   e_omega      tperi    e_tperi   RAdeg   DEdeg      JD        rate   MPC  
+Title: The Outer Solar System Origins Survey: 
+Authors: Bannister M.T., Kavelaars J.J., Petit J.-M., Gladman B.J., Gwyn S.D.J.,
+Table: Orbit and discovery properties of the characterized OSSOS objects
+================================================================================
+Byte-by-byte Description of file: CFEPS_g.CDS
+--------------------------------------------------------------------------------
+   Bytes Format Units       Label    Explanation (with possible notes)
+--------------------------------------------------------------------------------
+   1-  3 A3     ---         cl       Orbital population/class (1)
+   5-  5 A1     ---         p        Possibly additional information based on
+                                      class
+                                      IF cl=cent OR sca OR det:
+                                        no information ('x')
+                                      IF cl=res:
+                                        U or N indicating MMR planet (2)
+                                      IF cl=cla, portion of classical belt is
+                                        indicated as:
+                                          i : inner (a < a_(3:2 resonance) )
+                                          m : inner (a_(3:2 resonance) < a 
+                                                < a_(2:1 resonance) )
+                                          o : outer (a < a_(2:1 resonance) )
+                                                and not detached
+   7-  9 I3     ---         j        Resonant object is in the j : k resonance
+                                      (-1 is null)
+  11- 13 I3     ---         k        Resonant object is in the j : k resonance
+                                      (-1 is null)
+  15- 16 A2     ---         sh       [ISH] Orbit classification status (3)
+  18- 27 A10    ---         object   Object identifier/designation (4)
+                                      See ossos-survey.org/tnodb for a
+                                      correspondence list to MPC
+  29- 33 F5.2   mag         mag      Cleaned mean magnitude DURING DISCOVERY 
+                                      Cleaned = flagged photometry not part of
+                                      average
+  35- 39 F5.3   mag       e_mag      Uncertainty in magnitude
+                                      (applies to Hsur also)
+  41- 41 A1     ---         Filt     Filter used in discovery observation
+  43- 47 F5.2   mag         Hsur     Surmised Absolute magnitude H, in
+                                      discovery filter
+  49- 55 F7.3   AU          dist     Object distance at discovery (5)
+  57- 63 F7.3   AU        e_dist     Uncertainty in dist (6)
+  65- 68 I4     ---         Nobs     Number of observations available
+  70- 78 F9.4   years       time     Length of measured orbital arc
+                                      (last-first observation)
+  80- 85 F6.3   arcsec      av-xres  Mean orbit-fit residual, RA
+  87- 92 F6.3   arcsec      av-yres  Mean orbit-fit residual, DEC
+  94- 99 F6.3   arcsec      max-x    Maximum orbit-fit residual, RA
+ 101-106 F6.3   arcsec      max-y    Maximum orbit-fit residual, DEC
+ 108-118 F11.6  AU          a        Semimajor axis (5)
+ 120-129 F10.4  AU        e_a        Uncertainty in a (6)
+ 131-139 F9.6   ---         e        Orbital eccentricity (5)
+ 141-149 F9.6   ---       e_e        Uncertainty in e (6)
+ 151-157 F7.3   deg         i        Inclination to the ecliptic (5)
+ 159-165 F7.3   deg       e_i        Uncertainty in i (6)
+ 167-174 F8.3   deg         Omega    Longitude of ascending node
+ 176-182 F7.3   deg       e_Omega    Uncertainty in Omega
+ 184-191 F8.3   deg         omega    Argument of perihelion
+ 193-201 F9.3   deg       e_omega    Uncertainty in omega
+ 203-212 F10.3  d           tperi    Modified Julian Date of osculating
+                                      perihelion passage
+ 214-223 F10.3  d         e_tperi    Uncertainty in tperi
+ 225-231 F7.3   deg         RAdeg    Right ascension (J2000) at mean equinox of
+                                      discovery
+ 233-239 F7.3   deg         DEdeg    Declination (J2000) at mean equinox of
+                                      discovery
+ 241-253 F13.5  d           JD       Central Julian Date of of first discovery
+                                      image
+ 255-259 F5.2   arcsec/h    rate     Angular rate of sky motion at discovery
+ 261-267 A7     ---         MPC      Compact MPC designation
+--------------------------------------------------------------------------------
+Note (1): Orbital population/Dynamical class, based on scheme from 
+          Gladman et al. (2008), "Solar System beyond Neptune"
+    cen = centaur
+    sca = scattering disk object
+    cla = classical belt
+    res = in mean-motion resonance
+    det = detached object ( a>a_(2:1) and e>0.24 and non-resonant and
+           non-scattering )
+    jco = Jupiter Coupled
+Note (2): Mean-motion resonance occupancy is checked for planets [U]ranus and
+    [N]eptune.
+Note (3): Orbit classification status:
+    First character:
+      I = the orbit classification is currently insecure; 
+    or
+      S = the orbit classification is secure.
+    Optional second character
+      H = human operator intervened and set the given orbit security status 
+Note (4): Survey designations here based on their OSSOS discovery, with a format
+    "o" for OSSOS, the last digit of the year in which the object was discovered
+    by OSSOS (3-6), the block ID letter (e,o) and the sequential number to give
+    unique identifiers, "PD" indicates previous discovery.
+       Object beginning "KO2" are Presurvey objects (Jones et al 2006, Icarus)
+       Object beginning "L" are CFEPS objects (Petit et al 2011, AJ))
+       Object beginning "HL" are Hilat Survey objects (Petit et al 2016, AJ))
+       Object beginning "ma" are from the PhD thesis of (Alexandersen et al
+        2016, AJ))
+Note (5): J2000 ecliptic barycentric coordinates.
+Note (6): Uncertainties from the covariance matrix of the orbital parameter
+           confidence regions as determined by the method described in
+           Bernstein and Khushalani (2000).
+--------------------------------------------------------------------------------
 det x  -1  -1 S       L3f01 23.48 0.127 g  7.66  38.013   0.002   13    2.2963  0.071  0.115  0.246  0.309   61.712686     0.0235  0.384044  0.000227   5.793   0.001   28.031   0.003  161.953     0.293  52622.702     59.363 190.581  -2.606 2452722.96126  3.23 K03FC9Z
 res N   5   2 S     L3f04PD 22.56 0.062 g  6.97  36.013   0.002   36    2.9983  0.774  0.449  0.800  0.497   55.286289     0.0289  0.402014  0.000427   5.869   0.000    3.921   0.000  143.214     0.046  45053.297      5.749 190.493  -5.385 2452722.96628  3.46 K00F08E
 sca x  -1  -1 S       L3q01 24.00 0.176 g  8.16  38.171   0.002   15    3.8986  0.251  0.127  0.377  0.298   51.054204     0.0203  0.484715  0.000263   6.922   0.001  160.303   0.001  254.014     0.016  65727.551      2.313 328.835 -10.957 2452882.82283  3.45 K03QB3W
@@ -179,9 +277,9 @@ xxx x  -1  -1 x     l4v19nt 23.99 0.427 g  9.45  28.642   3.759    3    0.0001  
 xxx x  -1  -1 x     l5c01nt 24.05 0.554 g  8.29  37.428   3.496    3    0.0003  0.057  0.041  0.085  0.062   38.403409    20.1725  0.025660  0.580622  24.388  17.754  130.311   1.629  353.619  1321.883  51445.275 302827.158 134.801  18.069 2453411.79429  3.46 -------
 xxx x  -1  -1 x     l5c04nt 24.21 0.332 g  8.39  37.952   3.065    3    0.0003  0.003  0.149  0.004  0.223   38.913248    20.3759  0.024985  0.569537   3.689  12.020  118.559  49.360    6.012  1358.120  51353.302 317403.272 135.871  17.806 2453411.79754  3.41 -------
 xxx x  -1  -1 x     l7a12nt 23.86 0.127 g  8.62  33.209   2.928    6    0.0002  0.299  0.054  0.486  0.109   34.198990    18.1132  0.029360  0.579510   6.341  11.677  117.519  19.185   20.220  1158.764  56018.485 221512.146 130.759  19.386 2454119.82608  3.79 -------
-cla m  -1  -1 S     o3e20PD 23.96 0.162 g  7.71  41.568   0.001   54   15.9186  0.120  0.043  0.251  0.172   43.237096     0.0034  0.039490  0.000059   1.171   0.000   56.759   0.002  171.768     0.027  59765.942      7.205 201.813  -8.446 2453121.82494  2.99 K01FI5K
-cla m  -1  -1 S     o3e37PD 23.64 0.234 g  7.08  44.621   0.001   50   12.8304  0.074  0.063  0.336  0.367   43.964762     0.0027  0.046419  0.000036   3.316   0.000   45.295   0.000  282.562     0.062  87786.414     20.052 204.297  -8.912 2453121.83202  2.77 K04H79J
-res N   3   2 S     o3l13PD 23.50 0.146 g  7.98  37.060   0.001   47   11.3123  0.094  0.044  0.247  0.226   39.427518     0.0024  0.165903  0.000045   8.345   0.000  175.647   0.000  118.526     0.012  41523.381      1.899 355.296  -1.955 2452909.86654  3.60 K03SV7R
-cla m  -1  -1 S    o5c051PD 24.15 0.218 g  7.97  41.429   0.001   44   13.0925  0.054  0.061  0.296  0.158   45.556838     0.0037  0.096773  0.000055   0.768   0.000  207.642   0.003  182.975     0.029  51527.312      7.416  35.083  13.849 2453318.87451  2.99 K04VD1A
-cla m  -1  -1 S    o5d135PD 23.81 0.013 g  7.11  46.964   0.001   51   12.2133  0.030  0.095  0.108  0.164   44.196500     0.0029  0.071842  0.000051   1.746   0.000   50.391   0.000  207.533     0.046  13054.386     14.171  36.094  13.941 2453318.87776  2.89 K04VD1B
-res N  17   9 I     o5t34PD 24.01 0.212 g  7.45  43.017   0.001   68   13.9934  0.058  0.088  0.269  0.166   45.958178     0.0029  0.169721  0.000033   5.081   0.000  347.100   0.000   96.968     0.014  75861.446      2.711 352.197  -2.888 2452909.86229  2.68 K03SV7P
+cla m  -1  -1 S     L4h05PD 23.96 0.162 g  7.71  41.568   0.001   54   15.9186  0.120  0.043  0.251  0.172   43.237096     0.0034  0.039490  0.000059   1.171   0.000   56.759   0.002  171.768     0.027  59765.942      7.205 201.813  -8.446 2453121.82494  2.99 K01FI5K
+cla m  -1  -1 S       L4h13 23.64 0.234 g  7.08  44.621   0.001   50   12.8304  0.074  0.063  0.336  0.367   43.964762     0.0027  0.046419  0.000036   3.316   0.000   45.295   0.000  282.562     0.062  87786.414     20.052 204.297  -8.912 2453121.83202  2.77 K04H79J
+res N   3   2 S       L3s05 23.50 0.146 g  7.98  37.060   0.001   47   11.3123  0.094  0.044  0.247  0.226   39.427518     0.0024  0.165903  0.000045   8.345   0.000  175.647   0.000  118.526     0.012  41523.381      1.899 355.296  -1.955 2452909.86654  3.60 K03SV7R
+cla m  -1  -1 S       L4v01 24.15 0.218 g  7.97  41.429   0.001   44   13.0925  0.054  0.061  0.296  0.158   45.556838     0.0037  0.096773  0.000055   0.768   0.000  207.642   0.003  182.975     0.029  51527.312      7.416  35.083  13.849 2453318.87451  2.99 K04VD1A
+cla m  -1  -1 S       L4v02 23.81 0.013 g  7.11  46.964   0.001   51   12.2133  0.030  0.095  0.108  0.164   44.196500     0.0029  0.071842  0.000051   1.746   0.000   50.391   0.000  207.533     0.046  13054.386     14.171  36.094  13.941 2453318.87776  2.89 K04VD1B
+res N  17   9 I       L3s04 24.01 0.212 g  7.45  43.017   0.001   68   13.9934  0.058  0.088  0.269  0.166   45.958178     0.0029  0.169721  0.000033   5.081   0.000  347.100   0.000   96.968     0.014  75861.446      2.711 352.197  -2.888 2452909.86229  2.68 K03SV7P

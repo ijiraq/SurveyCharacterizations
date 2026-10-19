@@ -1,4 +1,4 @@
-# File: All_Surveys_v11.detections
+# File: HiLat.detections
 #
 # cl p  j   k sh     object  mag e_mag Filt Hsur dist  e_dist    Nobs   time  av_xres av_yres max_x  max_y       a          e_a        e        e_e      i      e_i      Omega e_Omega    omega   e_omega      tperi    e_tperi   RAdeg   DEdeg      JD        rate   MPC  
 cla m  -1  -1 S       HL6r1 22.97 0.067 r  6.79  40.771   0.002   20    2.8501  0.097  0.110  0.403  0.358   40.385613     0.0077  0.038584  0.000446  21.057   0.001  211.259   0.002   23.279     0.271  27410.864     74.848 337.687   8.367 2453996.92750  3.21 K07RV4L

@@ -1,0 +1,21 @@
+
+--------------------------------------------------------------------------------
+
+This directory contains the pointing history, efficiency function and list of
+detected objects for the L3h block of CFEPS, the only CFEPS block observed in
+the MegaPrime r filter. The g-band blocks are in CFEPS_g.
+
+The content of this directory is:
+
+CFEPS_r
+   \---------- README.cfeps_r (this file) Describes the content of the directory
+    \--------- pointings.list           Pointing and time of the L3h block
+     \-------- L3h-smooth.eff           Efficiency function for block L3h
+      \------- CFEPS_r.detections       List of objects really detected in
+                                        L3h, with their dynamical class if
+                                        known, magnitude at detection, rate of
+                                        motion, H mag, and more.
+
+See CFEPS_g/README.formats for the format of a survey "block".
+
+--------------------------------------------------------------------------------

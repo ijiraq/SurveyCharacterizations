@@ -1,0 +1,25 @@
+
+--------------------------------------------------------------------------------
+
+This directory contains the pointing history, efficiency functions for each
+block, and the list of detected objects for the High Latitude survey (Petit
+et al. 2016, AJ), observed in the MegaPrime r filter.
+
+The content of this directory is:
+
+HiLat
+   \---------- README.hilat (this file) Describes the content of the directory
+    \--------- pointings.list           List of pointings and times of the
+     \                                  survey
+      \------- HLnX-smooth.eff          Efficiency function for block HLnX,
+       \                                where n gives the year (200n) and X a
+        \                               letter; the 2009 block HL9 is split
+         \                              into HL901 to HL922
+          \--- HiLat.detections         List of objects really detected in
+                                        HiLat, with their dynamical class if
+                                        known, magnitude at detection, rate of
+                                        motion, H mag, and more.
+
+See CFEPS_g/README.formats for the format of a survey "block".
+
+--------------------------------------------------------------------------------

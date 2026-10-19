@@ -1,0 +1,33 @@
+
+--------------------------------------------------------------------------------
+
+This directory contains the pointing history, efficiency functions for each
+block, and the list of detected objects, separated into various dynamical
+classes, for the g-band blocks of CFEPS. The r-band L3h block is in CFEPS_r
+and the R-band presurvey block is in CFEPS_presurvey.
+
+The content of this directory is:
+
+CFEPS_g
+   \---------- README.cfeps_g (this file) Describes the content of the directory
+    \--------- README.formats           Describes format of a survey "block"
+     \-------- pointings.list           List of pointings and times of the
+      \                                 survey
+       \------ LnX-smooth.eff           Efficiency function for block LnX,
+        \                               where n gives the year (200n) and X (a
+         \                              single letter) gives the fortnight the
+          \                             data was acquired
+            \- CFEPS_g.detections       List of objects really detected in
+	    |                           the CFEPS g-band blocks, with their
+            |                           dynamical class if known, magnitude at
+            |                           detection, rate of motion, H mag, and
+            |                           more.
+             \- CFEPS_g.CDS             Same as CFEPS_g.detections, in CDS
+                                        format.
+
+Six CFEPS objects (L3s04, L3s05, L4h05PD, L4h13, L4v01, L4v02) were later
+re-detected by OSSOS. They also appear in OSSOS_v11 under their OSSOS
+designations; the correspondence is in the top-level Duplicates file.
+Simulating CFEPS_g and OSSOS_v11 together counts them twice.
+
+--------------------------------------------------------------------------------

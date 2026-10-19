@@ -1,9 +1,8 @@
 
-README.ossos
+README.ossosv11
 
-COMBINED SURVEY ANALYSIS
-
-This subdir contains the OSSOSv11 survey characterizations.  
+This subdir contains the OSSOSv11 survey characterization (OSSOS only; the MA
+blocks are in MA).
 
 --------------------------------------------------------------------------------
 
@@ -12,9 +11,9 @@ block, and the list of detected objects
 
 The content of this directory is:
 
-OSSOSv11
+OSSOS_v11
   \---- README.ossosv11 (this file)     Describes content of the directory
-   \-------- README.format             Describes format of a survey "block"
+   \-------- README.formats            Describes format of a survey "block"
     \------- pointings.list            List of pointings and times of the
      \                                 survey, often grouped into chunks.
        \---- 201ySn.eff                Efficiency functions for OSSOS blocks,
@@ -22,12 +21,16 @@ OSSOSv11
        |                               single letter) semester, and n the
        |                               block name (eg, E, O, L, H, P, M, S, T,
        |                               D, C)
-        \--- OSSOSiv11.detections       List of objects really detected in
+        \--- OSSOS_v11.detections      List of objects really detected in
         |                              OSSOS, with their dynamical 
         |                              class if  known, magnitude at
         |                              detection, rate of motion, H mag,
         |                              and more.
-         \-- OSSOSv11.CDS              Same as OSSOSv11.detections, in CDS
+         \-- OSSOS_v11.CDS             Same as OSSOS_v11.detections, in CDS
                                        format.
+
+Six of the OSSOS objects are CFEPS re-detections (see the top-level Duplicates
+file); they also appear in CFEPS_g under their CFEPS designations, with their
+CFEPS detection circumstances.
 	    
 --------------------------------------------------------------------------------

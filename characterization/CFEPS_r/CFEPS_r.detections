@@ -1,4 +1,4 @@
-# File: CFEPS.detections
+# File: CFEPS_r.detections
 #
 # cl p  j   k sh     object  mag e_mag Filt Hsur dist  e_dist    Nobs   time  av_xres av_yres max_x  max_y       a          e_a        e        e_e      i      e_i      Omega e_Omega    omega   e_omega      tperi    e_tperi   RAdeg   DEdeg      JD        rate   MPC  
 res N   3   2 S       L3h01 23.12 0.112 r  7.81  33.324   0.001   21    2.2715  0.232  0.633  0.495  1.176   39.492378     0.0060  0.157495  0.000095   9.114   0.001  197.976   0.000    7.021     0.286  54322.837     51.660 194.416  -6.450 2452755.82408  3.62 K04FG4W

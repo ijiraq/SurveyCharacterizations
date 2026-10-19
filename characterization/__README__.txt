@@ -4,51 +4,41 @@ ObsSummary README for the OSSOSv11 release
 -------------------------------------------------------------------
 Contents
 
-Directories and files in ObsSummary directory
+Each subdirectory holds exactly one survey: its pointings.list, the .eff
+efficiency file of every block named in pointings.list, and its detections.
 
-All_Surveys     subdir  The full sample, including all detections from OSSOS,
-                        CFEPS, HiLat and MA.
-                        WARNING: 6 objects from CFEPS have been (blindly, not
-                        targeted) re-observed by OSSOS. These objects appear
-                        only once in All_Surveys.detections file. We have made
-                        the choice to list them as OSSOS detections, with their
-                        detection circumstances (in particular the filter - r -
-                        and the magnitude) at time of OSSOS. The detection
-                        circumstances at time of CFEPS can be found in the
-                        CFEPS/CFEPS.detections file.
-All_r_Surveys   subdir  All detections from OSSOS, CFEPS, HiLat and MA acquired
-                        in MegaPrime r filter. This comprise all OSSOS, MA,
-                        HiLat and the L3h block from CFEPS. In this sub-sample,
-                        there is no duplicate object (object detected in 2
-                        different surveys).
-CFEPS           subdir  All detections from CFEPS. This includes the objects
-                        detected in CFEPS and re-detected in OSSOS. These
-                        objects are listed here with their CFEPS detection
-                        circumstances.
-OSSOS           subdir  All detections from OSSOS and only OSSOS.
-OSSOS-MA        subdir  All detections from OSSOS and MA.
+CFEPS_g         subdir  The CFEPS blocks acquired in the g filter.
+                        This includes the 6 objects detected in CFEPS and
+                        (blindly, not targeted) re-observed by OSSOS. They are
+                        listed under their CFEPS designations, with their CFEPS
+                        detection circumstances. They also appear in OSSOS_v11
+                        under their OSSOS designations, with their OSSOS
+                        detection circumstances; the correspondence is in the
+                        top-level Duplicates file. A combined
+                        CFEPS_g + OSSOS_v11 run counts them twice.
+CFEPS_r         subdir  The CFEPS L3h block, acquired in MegaPrime r filter.
+CFEPS_presurvey subdir  The CFEPS presurvey block (Jones et al. 2006), R filter.
+HiLat           subdir  The High Latitude survey, r filter.
+MA              subdir  The mal and mah blocks (Alexandersen et al. 2016),
+                        r filter.
+OSSOS_v11       subdir  All detections from OSSOS and only OSSOS, r filter.
+jwst_sample_a   subdir  JWST GO 1568 Sample A (Eduardo et al. 2026); a
+                        multi-epoch survey root, not part of the v11 release.
+N26             subdir  HST GO-9433 heliostack (Napier et al. 2026), F606W
+                        STMAG (filter t); not part of the v11 release. See
+                        N26/README.n26.
 
-Correspondence.list     Matches MPC names to Surveys.  Human readable format
-OSSOSv11ScatterPlots.pdf Plot of uncertainties and orbital elements
-README_ObsS_v11.txt     this file
-Uncharact.detections    Orbital elements and classes for Uncharacterised 
-                        objects that were tracked outside of the discovery
-                        dark run. Same format as All_Surveys_v11.detections
-Uncharact-nt.detections Orbital elements and classes for Uncharacterised and
-                        non-tracked objects. Same format as above.
+Detection files for the characterized samples can be found in the above
+directories. File names are <sample>/<sample>.detections and, where
+available, <sample>/<sample>.CDS. As an example, the OSSOS files are in
+OSSOS_v11 as:
 
-Detection files for the various characterized samples can be found in the above
-directories. File names are <sample>/<sample>[_v11].detections and
-<sample>/<sample>[_v11].CDS. As an example, the full sample files are in
-All_Surveys as:
-
-All_Surveys_v11.detections Orbital elements and classes. This is a
+OSSOS_v11.detections    Orbital elements and classes. This is a
                         space-separated value file, with name of the column
                         given on the last comment line (starting with #) at the
                         start of the file. See header of CDS file for a
                         description of the columns.
-			Contains OSSOS, CFEPS, HiLat and MA.
-All_Surveys_v11.CDS        Same as All_Surveys_v11.detections in CDS format
+OSSOS_v11.CDS           Same as OSSOS_v11.detections in CDS format
 
 -------------------------------------------------------------------
 File Formats

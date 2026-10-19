@@ -16,10 +16,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CHAR = ROOT / "characterization"
 NAME = "jwst_sample_a"
 SURVEY = CHAR / NAME
-# Verbatim single-epoch characterizations: the OSSOS v11 release sets, and
-# OSSOS-B from the OSSOS First Data Release (Bannister et al. 2016).
-VERBATIM_SURVEYS = ("CFEPS", "OSSOS-MA", "All_Surveys", "All_r_Surveys", "Deep_Surveys",
-                    "OSSOS-B")
+# Single-epoch characterizations from the OSSOS v11 release, one survey each.
+SINGLE_EPOCH_SURVEYS = ("CFEPS_g", "CFEPS_r", "CFEPS_presurvey", "HiLat", "MA", "OSSOS_v11")
 EPOCH_JD = (2459969.32118, 2459973.96785, 2459979.90854)
 FIELD_RA, FIELD_DEC = 209.3875, -10.865278
 SIDE_DEG = math.sqrt(0.05)
@@ -41,6 +39,19 @@ def pointing_rows(path: Path) -> list[list[str]]:
     return [
         line.split() for line in path.read_text().splitlines()
         if line.strip() and not line.lstrip().startswith("#")
+    ]
+
+
+def detection_objects(path: Path) -> list[str]:
+    """Object column of a CFEPS-format .detections file."""
+    return [row[5] for row in pointing_rows(path) if len(row) > 20]
+
+
+def cds_objects(path: Path) -> list[str]:
+    """Object column (bytes 18-27) of the data rows of a .CDS file."""
+    return [
+        line[17:27].strip() for line in path.read_text().splitlines()
+        if len(line) > 250 and line[:3].isalpha() and line[:3].islower() and line[3] == " "
     ]
 
 
@@ -127,9 +138,9 @@ class LayoutTest(unittest.TestCase):
             self.assertIn(col, rows[0])
 
 
-class VerbatimSurveyLayoutTest(unittest.TestCase):
+class SingleEpochSurveyLayoutTest(unittest.TestCase):
     def test_single_epoch_survey_roots(self):
-        for name in VERBATIM_SURVEYS:
+        for name in SINGLE_EPOCH_SURVEYS:
             with self.subTest(survey=name):
                 d = CHAR / name
                 rows = pointing_rows(d / "pointings.list")
@@ -140,10 +151,44 @@ class VerbatimSurveyLayoutTest(unittest.TestCase):
                 for eff in effs:
                     self.assertTrue((d / eff).is_file(), eff)
 
+    def test_eff_files_match_pointings(self):
+        for name in SINGLE_EPOCH_SURVEYS:
+            with self.subTest(survey=name):
+                d = CHAR / name
+                referenced = {row[-1] for row in pointing_rows(d / "pointings.list")
+                              if row[-1].endswith(".eff")}
+                present = {p.name for p in d.glob("*.eff")}
+                self.assertEqual(referenced, present)
+
+    def test_detections_named_after_survey(self):
+        for name in SINGLE_EPOCH_SURVEYS:
+            with self.subTest(survey=name):
+                d = CHAR / name
+                self.assertEqual([p.name for p in d.glob("*.detections")],
+                                 [f"{name}.detections"])
+                objects = detection_objects(d / f"{name}.detections")
+                self.assertTrue(objects)
+                self.assertEqual(len(objects), len(set(objects)))
+                cds = d / f"{name}.CDS"
+                if cds.exists():
+                    self.assertEqual(sorted(cds_objects(cds)), sorted(objects))
+
+    def test_redetections_use_each_surveys_designation(self):
+        pairs = pointing_rows(ROOT / "Duplicates")
+        self.assertEqual(len(pairs), 6)
+        cfeps = set(detection_objects(CHAR / "CFEPS_g" / "CFEPS_g.detections"))
+        ossos = set(detection_objects(CHAR / "OSSOS_v11" / "OSSOS_v11.detections"))
+        for ossos_name, cfeps_name in pairs:
+            with self.subTest(ossos=ossos_name, cfeps=cfeps_name):
+                self.assertIn(cfeps_name, cfeps)
+                self.assertNotIn(ossos_name, cfeps)
+                self.assertIn(ossos_name, ossos)
+                self.assertNotIn(cfeps_name, ossos)
+
     def test_filters_have_colours(self):
         with (ROOT / "colour.toml").open("rb") as fh:
             colours = tomllib.load(fh)
-        for name in VERBATIM_SURVEYS:
+        for name in SINGLE_EPOCH_SURVEYS:
             for eff in (CHAR / name).glob("*.eff"):
                 filt = read_keyed(eff).get("filter")
                 if filt:
@@ -171,10 +216,10 @@ class SimulatorTest(unittest.TestCase):
         self.assertEqual(len(s), 3)
         self.assertEqual({p.key for p in s}, {f"{NAME}/{NAME}"})
 
-    def test_verbatim_surveys_load_as_single_epoch(self):
+    def test_single_epoch_surveys_load(self):
         from ossssim import SurveyCharacterization
 
-        for name in VERBATIM_SURVEYS:
+        for name in SINGLE_EPOCH_SURVEYS:
             with self.subTest(survey=name):
                 s = SurveyCharacterization.from_directory(str(CHAR / name))
                 self.assertEqual(s.n_epochs, 1)
