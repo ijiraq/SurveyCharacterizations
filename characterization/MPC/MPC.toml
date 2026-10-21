@@ -1,0 +1,51 @@
+# MPC "complete survey": the Minor Planet Center orbit catalogue treated as
+# a survey that has found every cold classical with H_r < h_lim, anywhere on
+# the sky. See README.mpc for where each value comes from.
+#
+#   python mpc_photometry.py               MPC observations -> MPC_photometry.csv (H_r)
+#   python make_mpc.py                     MPCORB.DAT + MPC_photometry.csv -> MPC.csv (h = H_r)
+#   survey_debias_eff --root .. --complete characterization/MPC/MPC.toml \
+#       --model M --ifree-max 4 --tag coldfree [--overlap-with SURVEY ...]
+#                                          -> eps_coldfree.csv, eps_coldfree_x_SURVEY.csv
+#
+# In a survey_debias_joint configuration:
+#   [[survey]]
+#   name = "MPC"
+#   format = "complete"
+#   spec = "characterization/MPC/MPC.toml"
+#   select = { comp = "cold" }
+
+[survey]
+name = "MPC complete survey"
+surveys = ["MPC"]
+format = "complete"
+# MPC.csv h is H_r (PS1/Rubin r), measured from the MPC photometry for the
+# objects near and below the limit.
+filter = "r"
+# MPC H < 5.5 (no cold discovery brighter since 2014; MPC_completeness.txt)
+# less the median MPC H - H_r = 0.084 of the measured objects.
+h_lim = 5.42
+# Scatter of the measured H_r about the true H_r: median-of-nights errors
+# 0.01-0.08 and the phase coefficient (beta 0.08-0.20 moves H_r by 0.03).
+sigma_h = 0.05
+model_band = "r"
+colour_file = "colour.toml"
+detections_relpath = "characterization/MPC/MPC.csv"
+duplicates_relpath = "characterization/MPC/MPC.duplicates"
+mpcorb_snapshot = "2026-10-19"
+
+# The sample cut, as applied by make_mpc.py (comp = "cold") and to the model
+# by survey_debias_eff (--ifree-max; the OSSOS 1.0 cold components span a =
+# 42.4 - 48.1 au). ifree_max is the free inclination of Huang, Gladman & Volk
+# (2022), from their Table 1 where listed, else their forcing-pole grid.
+[cut]
+a_min = 42.4
+a_max = 47.7
+q_min = 37.0
+ifree_max = 4.0
+
+[detection_columns]
+name = "desig"
+h = "h"
+i = "i"
+comp = "comp"

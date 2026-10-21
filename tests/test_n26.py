@@ -59,8 +59,9 @@ class N26LayoutTest(unittest.TestCase):
             self.assertEqual(Path(survey[key]).parent, SURVEY.relative_to(ROOT), key)
         with (ROOT / survey["detections_relpath"]).open() as fh:
             rows = list(csv.DictReader(fh))
+        # 2003 BG91 is from the Bernstein et al. bright search (README.n26).
         self.assertEqual([r["name"] for r in rows],
-                         ["2003BF91", "2003BH91", "2003ABCD", "2003WXYZ"])
+                         ["2003BG91", "2003BF91", "2003BH91", "2003ABCD", "2003WXYZ"])
         for col in cfg["detection_columns"].values():
             self.assertIn(col, rows[0])
 

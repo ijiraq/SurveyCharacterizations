@@ -1,0 +1,97 @@
+J/AJ/167/136      DEEP. VI. 110 Trans-Neptunian Objects      (Smotherman+, 2024)
+================================================================================
+The DECam Ecliptic Exploration Project (DEEP).
+VI. Observations of Trans-Neptunian Objects
+    Smotherman H, Bernardinelli P.H, Portillo S.K.N, Connolly A.J,
+    Kalmbach J.B, Stetzler S, Juric M, Bektesevic D, Langford Z, Adams F.C,
+    Oldroyd W.J, Holman M.J, Chandler C.O, Fuentes C, Gerdes D.W, Lin H.W,
+    Markwardt L, Mcneill A, Mommert M, Napier K.J, Payne M.J, Ragozzine D,
+    Rivkin A.S, Schlichting H, Sheppard S.S, Strauss R, Trilling D.E,
+    Trujillo C.A
+   <Astron. J., 167, 136 (2024)>
+   =2024AJ....167..136S
+================================================================================
+ADC_Keywords: Solar system; Minor planets; Positional data
+Keywords: Kuiper Belt; Surveys; Trans-Neptunian objects
+
+Abstract:
+    We present the first set of trans-Neptunian objects (TNOs) observed on
+    multiple nights in data taken from the DECam Ecliptic Exploration
+    Project. Of these 110 TNOs, 105 do not coincide with previously known
+    TNOs and appear to be new discoveries. Each individual detection for
+    our objects resulted from a digital tracking search at TNO rates of
+    motion, using two-to-four-hour exposure sets, and the detections were
+    subsequently linked across multiple observing seasons. This procedure
+    allows us to find objects with magnitudes mVR~26. The object discovery
+    processing also included a comprehensive population of objects
+    injected into the images, with a recovery and linking rate of at least
+    94%. The final orbits were obtained using a specialized orbit-fitting
+    procedure that accounts for the positional errors derived from the
+    digital tracking procedure. Our results include robust orbits and
+    magnitudes for classical TNOs with absolute magnitudes H~10, as well
+    as a dynamically detached object found at 76au (semimajor axis
+    a~77au). We find a disagreement between our population of classical
+    TNOs and the CFEPS-L7 three-component model for the Kuiper Belt.
+
+Description:
+    As its acronym indicates, DEEP uses the Dark Energy Camera (DECam) on
+    the 4m Blanco telescope at the Cerro Tololo Inter-American Observatory
+    (CTIO). The data are taken in the VR band.
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName    Lrecl    Records    Explanations
+--------------------------------------------------------------------------------
+ReadMe          80          .    This file
+table2.dat     200        110   *Orbital properties of the TNOs from DEEP B1
+--------------------------------------------------------------------------------
+Note on table2.dat: All elements correspond to Julian epoch
+    2019-08-30, and are barycentric and ecliptic-aligned.
+--------------------------------------------------------------------------------
+
+See also:
+ J/A+A/468/L13 : Photometry of the trans-Neptunian object 2005FY9 (Ortiz+, 2007)
+ J/A+A/508/451 : Light curves of 5 Trans-Neptunian Objects (Perna+, 2009)
+ J/ApJ/743/1   : Astrometry of 7 wide trans-Neptunian binaries (Parker+, 2011)
+ J/AJ/152/80   : Astrometry of Pluto and trans-Neptunian objects (Holman+, 2016)
+ J/AJ/152/111  : 2011-2013 survey trans-Neptunian objects (Alexandersen+, 2016)
+ J/AJ/152/221  : New extreme trans-Neptunian objects (Sheppard+, 2016)
+ J/ApJS/267/33 : FOSSIL. III. LCs of Trans-Neptunian Objects (Ashton+, 2023)
+
+Byte-by-byte Description of file: table2.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1- 10 F10.7  au      a         [37.7/90.1] Semi-major axis
+  12- 20 F9.7   ---     e         [0.005/0.59] Eccentricity
+  22- 31 F10.7  deg     i         [0.34/33.1] Inclination
+  33- 43 F11.7  deg     aop       [0/360] Argument of perihelion
+  45- 55 F11.7  deg     lan       [1/360] Longitude of ascending node
+  57- 68 F12.7  yr      Tp        [1869/2161] Time of perihelion passage,
+                                   Julian years
+  70- 78 F9.7   au    e_a         Uncertainty in a
+  80- 88 A9     ---   e_e         Uncertainty in e
+  90- 98 A9     deg   e_i         Uncertainty in i
+ 100-108 A9     deg   e_lan       Uncertainty in lan
+ 110-119 F10.7  deg   e_aop       Uncertainty in aop
+ 121-130 F10.7  yr    e_Tp        Uncertainty in Tp
+ 132-141 F10.7  mag     VRmag     [22.3/26.1] Mean magnitude
+ 143-152 F10.7  mag     VRMAG     [6.05/10.1] Phase-corrected absolute magnitude
+ 154-162 F9.7   mag   e_VRmag     [0.003/0.2] Uncertainty in mVRmag, HVRmag
+ 164-175 A12    ---     Class     Dynamical classification
+ 177-181 A5     ---     Secure    Is the dynamical classification secure?
+ 183-189 A7     ---     DEEP      DEEP sequential identifier
+ 191-200 A10    ---     MPC       Minor Planet Center object designation
+--------------------------------------------------------------------------------
+
+History:
+    From electronic version of the journal
+
+References:
+    Trilling et al.         Paper I   : 2024AJ....167..132T
+    Trujillo  et al.        Paper II  : 2024AJ....167..133T
+    Bernardinelli et al.    Paper III : 2024AJ....167..134B
+    Strauss et al.          Paper IV  : 2024AJ....167..135S
+
+================================================================================
+(End)                         Prepared by [AAS], Coralie Fix [CDS], 17-May-2024

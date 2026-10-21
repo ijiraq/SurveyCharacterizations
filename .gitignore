@@ -15,3 +15,6 @@ characterization/*/eps_*.csv
 # ossssim writes its planetary ephemeris cache to the working directory
 Rebound_Archive*.bin
 joint/joint_*/
+# MPC orbit file (~320 MB, re-download it) and the publisher's copy of the paper
+[Mm][Pp][Cc][Oo][Rr][Bb].[Dd][Aa][Tt]
+characterization/MPC/*.epub

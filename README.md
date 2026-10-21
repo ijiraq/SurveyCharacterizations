@@ -15,6 +15,8 @@ read by the OSSOS [SurveySimulator](https://github.com/ijiraq/SurveySimulator)
 | `OSSOS_v11/` | OSSOS, all blocks (v11 release) | 1 | r |
 | `jwst_sample_a/` | JWST GO 1568 Sample A (Eduardo et al. 2026) | 3 | H (F150W2) |
 | `N26/` | HST GO-9433 heliostack (Napier et al. 2026) | 1 | t (F606W STMAG) |
+| `MPC/` | the MPC orbit catalogue, complete for cold classicals with H_r < 5.42 | 1 (36 tiles) | r |
+| `DEEP/` | DEEP B1 linked sample, 110 TNOs (Smotherman et al. 2024); efficiency provisional | 29 (any 4) | r (DECam VR on PS1 r) |
 
 All of them are under `characterization/`. Sample B of Eduardo et al. (two
 epochs at S/N > 8, a different efficiency) would follow the same layout as
@@ -57,6 +59,26 @@ characterization/
     pointings.list              ACS/WFC mosaic at the 15-day stack midpoint
     N26.eff                     F606W STMAG detection efficiency (filter= t)
     HST.csv, HST.jpl_batch      JPL Horizons HST barycentric vectors and request
+  MPC/                          complete survey (all cold classicals below an H limit)
+    README.mpc                  completeness limit, H scale, vetting, ossssim validation
+    MPC.toml                    complete-survey spec (filter r, h_lim, sigma_h, cut)
+    MPC.csv                     MPCORB orbits with 30 <= a <= 150 au, MPC H <= 7; h = H_r
+    mpc_photometry.py, obs/     MPC observations -> measured H_r (MPC_photometry.csv)
+    MPC.duplicates, MPC.vetting cross-IDs with OSSOS/CFEPS; resonance vetting
+    make_mpc.py                 MPCORB.DAT (not committed) -> MPC.csv, completeness, calibration
+    vet_resonances.py           10 Myr REBOUND integrations behind MPC.vetting
+    make_pointings.py           pointings.list and MPC_<lon>.eff (ossssim imitation)
+    validate_ossssim.py         checks the tiles reproduce H_r < h_lim
+  DEEP/                         multi-epoch survey: 29 long stares, detection on any 4
+    README.deep                 sources, checks, approximations, what is still needed
+    DEEP.toml                   survey_debias configuration
+    DEEP.csv                    detections (DEEP VI Table 2)
+    survey.conf                 detections_required = 4
+    make_deep.py                source/ -> DEEP.csv and epoch*/
+    source/                     VizieR table, DEEP VI Table 1, NOIRLab archive stares
+    epoch1/ ... epoch29/
+      pointings.list            DECam outline at the stare's boresight, fill 0.860
+      DEEP.eff                  single-night efficiency (filter= r), provisional
 ```
 
 - **Survey identity** is the directory name: detections are attributed to the
@@ -133,6 +155,66 @@ F606W STMAG is labelled with the filter letter `t`: it is close to r but is
 neither r nor w. `colour.toml` sets `"t-g" = "r-g" + 0.3`, i.e.
 r_AB = STMAG − 0.3. Provenance of every number is in
 `characterization/N26/README.n26`.
+
+## MPC (complete survey)
+
+| | |
+|---|---|
+| Sample | MPCORB snapshot 2026-10-19; cold classicals: 42.4 ≤ a ≤ 47.7 au, free inclination i_free < 4° (Huang et al. 2022), q ≥ 37 au, non-resonant (Huang et al.'s classification, else 10 Myr integrations) |
+| Completeness | H_r < 5.42 (MPC H < 5.5): no cold discovery brighter than that since 2014 (the whole Kuiper belt is *not* complete there) |
+| Detections | 5, all with H_r measured from their MPC photometry |
+| H scale | r (PS1/Rubin): `MPC.csv` `h` is H_r, `h_mpc` the MPC's own H |
+| survey_debias | `format = "complete"`: eps = 0.714 × 1(H_r < 5.42), analytic (`survey_debias_eff --complete --ifree-max 4`) |
+| ossssim | 36 ecliptic tiles (\|β\| ≤ 8°) at opposition, per-tile `.eff` with a rate-dependent limit; recovers H_r < 5.42 to 0.005 mag (edge 10–90% in 0.15 mag) |
+
+MPCORB's H is the MPC's own, from mixed bands with its own corrections, so
+`MPC.csv` carries H_r instead. `mpc_photometry.py` downloads each candidate's
+observations from the MPC, reduces them to H in each reported band from the
+orbit's distances and phase angles, and moves them to r with band offsets
+measured against Rubin r; objects without usable photometry get MPC H − 0.084
+(the median difference). The details, including why the limit is 5.42, are
+in `characterization/MPC/README.mpc`. `joint/coldfree_all_mpc.toml` adds the
+MPC to the joint cold fit. `colour.toml` corrects V to Jester et al. (2005)
+(V − r = +0.32 for cold colours).
+
+## Cold classicals: free inclination
+
+The joint fits in `joint/` select cold classicals one of two ways:
+
+| Configurations | eps tag | Cold sample |
+|---|---|---|
+| `cold_*.toml` | `cold` | main-belt classical (`cl = cla`, `p = m`), ecliptic i < 5° |
+| `coldfree_all.toml`, `coldfree_all_mpc.toml` | `coldfree` | main-belt classical, free inclination i_free < 4° |
+
+The free inclination is that of Huang, Gladman & Volk (2022, ApJS 259, 54):
+the angle to the local forcing pole, which a non-resonant orbit keeps while
+its ecliptic i cycles, so the 4° cut separates the cold and hot components
+much more cleanly. `survey_debias.ifree` gives it: Huang et al.'s Table 1
+where the object is listed (540 of the 549 OSSOS++ main-belt classicals,
+matched by name), otherwise their forcing-pole grid on barycentric elements.
+JWST Sample A and N26 keep their papers' cold classifications (short arcs,
+no usable node). The `coldfree` eps tables are planted with each model
+row's free inclination kept (`survey_debias_eff --ifree-max 4`), because the
+OSSOS 1.0 cold model is drawn about a forced plane, not the ecliptic.
+
+## DEEP B1 (linked sample)
+
+| | |
+|---|---|
+| Field | 10 DECam fields (B1a–j) along the invariable plane near RA 353°, Dec −4° |
+| Epochs | 29 long stares, 2019-08-27 to 2021-10-06 (DEEP VI Table 1; times from the NOIRLab archive) |
+| Detection | found on at least 4 stares (`detections_required = 4`) |
+| Footprint | DECam CCD-row outline, 3.130 deg², fill 0.860 (60 searched CCDs) |
+| Rates | 1.473–5.126 ″/hr, within 45° of the direction of decreasing ecliptic longitude |
+| Efficiency per stare | DEEP III Eq. (3): c = 0.787, m25 = 26.22, k1 = 2.14, k2 = 5.02 (`function= double`) |
+| Detections | 110: 73 cold, 23 hot, 6 resonant, 6 detached, 2 scattering |
+
+VR is calibrated to Pan-STARRS r with no colour term, so the filter letter is
+`r`. The efficiency is the survey-wide curve of DEEP III Figure 2 on every
+night until DEEP's per-pointing-group table is available. DEEP needs an
+`ossssim` with the equinox observer-frame fix and a `survey_debias` that aims
+plants at every epoch of a K-of-N survey (both 2026-10-20). Sources, checks
+and approximations are in `characterization/DEEP/README.deep`.
 
 ## Installation
 

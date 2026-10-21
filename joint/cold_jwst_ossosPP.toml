@@ -1,0 +1,57 @@
+# Joint cold-classical H-distribution fit: every survey with cold (i < 5 deg) detections.
+#
+# eps tables: see cold_jwst_ossos_cfeps.toml, plus
+#   survey_debias_eff --root .. --survey CFEPS_presurvey --model M --i-max 5 $X \
+#       --overlap-with OSSOS_v11 --overlap-with CFEPS_r --overlap-with CFEPS_g
+#   survey_debias_eff --root .. --survey MA --model M --i-max 5 $X --overlap-with OSSOS_v11 \
+#       --overlap-with CFEPS_r --overlap-with CFEPS_g --overlap-with CFEPS_presurvey
+# with X = --exclude-block 2015BS --exclude-block L3s-smooth --exclude-block L3f-smooth.
+#
+# HiLat is left out: its fields are at ecliptic latitudes >= 12 deg, which an
+# i < 5 deg orbit never reaches, so it has no cold sample and eps = 0 (two of
+# its blocks also fail survey_debias_eff --check-detections).
+
+[joint]
+name = "All surveys, cold classicals"
+root = ".."
+colour_file = "colour.toml"
+colour_group = "cold"
+model_band = "r"
+eps_tag = "cold"
+sigma_delta = 0.10
+sigma_c = 0.2
+priority = ["OSSOS_v11", "CFEPS_r", "CFEPS_g", "CFEPS_presurvey", "MA", "jwst_sample_a"]
+duplicates = "Duplicates"
+
+[[survey]]
+name = "OSSOS_v11"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "CFEPS_r"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "CFEPS_g"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "CFEPS_presurvey"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "MA"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "jwst_sample_a"
+format = "csv"
+detections = "characterization/jwst_sample_a/jwst_sample_a.csv"
+columns = { mag = "m_f150w2", d_bary = "d_bary", name = "name" }
+select = { comp = "cold" }
+

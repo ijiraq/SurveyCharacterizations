@@ -1,0 +1,72 @@
+# Joint cold-classical H-distribution fit: every survey with cold (i < 5 deg)
+# detections, plus the MPC catalogue as a survey complete for H_r < 5.42
+# (MPC H < 5.5; MPC.csv h is H_r measured from the MPC photometry; see
+# characterization/MPC/README.mpc). Same surveys and settings as cold_all.toml.
+#
+# eps tables: see cold_all.toml, plus
+#   survey_debias_eff --root .. --complete characterization/MPC/MPC.toml --model M --i-max 5
+# (the joint fit computes the MPC overlaps with the other surveys itself, from
+# their eps_cold.csv; --overlap-with writes the same tables for inspection).
+#
+# MPC comes first in priority: it owns every cold object below its limit. The
+# other surveys lose their detections of MPC objects (MPC.duplicates, added
+# from MPC.toml), subtract the overlap from their expected counts and get the
+# window 1 - P(MPC H_r < 5.42 | H) in their conditional terms.
+
+[joint]
+name = "All surveys + MPC (H_r < 5.42), cold classicals"
+root = ".."
+colour_file = "colour.toml"
+colour_group = "cold"
+model_band = "r"
+eps_tag = "cold"
+sigma_delta = 0.05
+sigma_c = 0.2
+priority = ["MPC", "OSSOS_v11", "CFEPS_r", "CFEPS_g", "CFEPS_presurvey", "MA", "jwst_sample_a",
+            "N26"]
+duplicates = ["Duplicates"]
+
+[[survey]]
+name = "MPC"
+format = "complete"
+spec = "characterization/MPC/MPC.toml"
+select = { comp = "cold" }
+
+[[survey]]
+name = "OSSOS_v11"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "CFEPS_r"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "CFEPS_g"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "CFEPS_presurvey"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "MA"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
+
+[[survey]]
+name = "jwst_sample_a"
+format = "csv"
+detections = "characterization/jwst_sample_a/jwst_sample_a.csv"
+columns = { mag = "m_f150w2", d_bary = "d_bary", name = "name" }
+select = { comp = "cold" }
+
+[[survey]]
+name = "N26"
+format = "csv"
+detections = "characterization/N26/N26.csv"
+columns = { mag = "m_stmag", d_bary = "d_bary", name = "name" }
+select = { comp = "cold" }

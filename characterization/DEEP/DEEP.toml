@@ -1,0 +1,56 @@
+# DEEP B1 linked sample (Smotherman et al. 2024, AJ 167, 136; "DEEP VI"): the
+# 110 TNOs with multi-year KBMOD orbits from the 2019-2021 B1 long stares.
+#
+#   survey_debias --survey characterization/DEEP/DEEP.toml \
+#       --root . --model Models/OSSOS
+#
+# Orbits are well determined (sigma_a/a ~ 1e-4), so this survey uses aq_grid.
+#
+# Paths are relative to --root (the repository root). Everything for this
+# survey lives in characterization/DEEP/ (README.deep says where every value
+# comes from and what is still provisional):
+#   DEEP.toml            this file
+#   DEEP.csv             detections (DEEP VI Table 2), m_vr in DECam VR ~ PS1 r
+#   survey.conf          detections_required = 4 (of 29 long stares)
+#   epoch{1..29}/
+#     pointings.list       DECam outline at the long-stare boresight, fill 0.860
+#     DEEP.eff             single-night efficiency, filter= r (PROVISIONAL:
+#                          survey-wide DEEP III curve on every night)
+#   make_deep.py         source/ -> DEEP.csv and the epoch directories
+# The observer is geocentric (500); colours come from the shared colour.toml
+# at the root.
+#
+# Not modelled: the 94% linking efficiency (one factor per object; multiply
+# the detection probability by 0.94) and the linking arc cuts (README.deep).
+
+[survey]
+name = "DEEP B1 linked"
+model_band = "r"
+colour_file = "colour.toml"
+surveys = ["DEEP"]
+paper_reference_jd = 2459140.5  # d_bary epoch: middle of the 2019-2021 baseline
+rate_cut_min_arcsec_hr = 1.473
+rate_cut_max_arcsec_hr = 5.126
+detections_relpath = "characterization/DEEP/DEEP.csv"
+detections_full_name = "characterization/DEEP/DEEP.detections-full"
+results_name = "characterization/DEEP/DEEP.bias.csv"
+check_detected_title = "found on >= 4 of 29 long stares"
+bias_method = "aq_grid"
+
+# Program name = column in the detections table. These are the columns read.
+# aq_grid requires mag, a, d_bary, e or q, and i or ifree; ifree is computed
+# from i, a and Omega.
+[detection_columns]
+mag = "m_vr"
+name = "name"
+a = "a"
+e = "e"
+i = "i"
+Omega = "Omega"
+d_bary = "d_bary"
+comp = "comp"
+
+# The catalogue has no survey or block column: every row is DEEP/DEEP.
+[detection_defaults]
+survey = "DEEP"
+block = "DEEP"

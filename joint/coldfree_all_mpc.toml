@@ -1,0 +1,85 @@
+# Joint cold-classical H-distribution fit, cold = free inclination < 4 deg:
+# every survey with cold detections, plus the MPC catalogue as a survey
+# complete for H_r < 5.42 (characterization/MPC/README.mpc), first in priority.
+# As cold_all_mpc.toml, but the cold sample is i_free < 4 deg (Huang, Gladman & Volk 2022, ApJS 259, 54) instead of
+# ecliptic i < 5 deg: survey_debias.ifree gives I_free from their Table 1
+# (by OSSOS++ name or MPC designation), else from their forcing-pole grid.
+#
+# jwst_sample_a and N26 keep their papers' cold classifications (comp =
+# cold): their short arcs do not give a usable node; their eps tables use
+# the i_free < 4 cut like the others.
+#
+# eps tables (re-planted with the model's free inclinations kept, --aim ifree):
+#   C="--root .. --model M --tag coldfree --ifree-max 4"
+#   X="--exclude-block 2015BS --exclude-block L3s-smooth --exclude-block L3f-smooth"
+#   survey_debias_eff $C --survey OSSOS_v11 $X
+#   survey_debias_eff $C --survey CFEPS_r $X --overlap-with OSSOS_v11
+#   survey_debias_eff $C --survey CFEPS_g $X --overlap-with OSSOS_v11 --overlap-with CFEPS_r
+#   survey_debias_eff $C --survey CFEPS_presurvey $X --overlap-with OSSOS_v11 \
+#       --overlap-with CFEPS_r --overlap-with CFEPS_g
+#   survey_debias_eff $C --survey MA $X --overlap-with OSSOS_v11 --overlap-with CFEPS_r \
+#       --overlap-with CFEPS_g --overlap-with CFEPS_presurvey
+#   survey_debias_eff $C --survey jwst_sample_a $X --r-min 38 --r-max 55 \
+#       --overlap-with OSSOS_v11 --overlap-with CFEPS_r --overlap-with CFEPS_g
+#   survey_debias_eff $C --survey N26 $X --overlap-with OSSOS_v11 --overlap-with CFEPS_r \
+#       --overlap-with CFEPS_g --overlap-with CFEPS_presurvey --overlap-with MA \
+#       --overlap-with jwst_sample_a
+#   survey_debias_eff --root .. --complete characterization/MPC/MPC.toml --model M \
+#       --tag coldfree --ifree-max 4
+
+[joint]
+name = "All surveys + MPC (H_r < 5.42), cold classicals (i_free < 4)"
+root = ".."
+colour_file = "colour.toml"
+colour_group = "cold"
+model_band = "r"
+eps_tag = "coldfree"
+sigma_delta = 0.05
+sigma_c = 0.2
+priority = ["MPC", "OSSOS_v11", "CFEPS_r", "CFEPS_g", "CFEPS_presurvey", "MA", "jwst_sample_a", "N26"]
+duplicates = ["Duplicates"]
+
+[[survey]]
+name = "MPC"
+format = "complete"
+spec = "characterization/MPC/MPC.toml"
+select = { comp = "cold" }
+
+[[survey]]
+name = "OSSOS_v11"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], ifree_max = 4.0 }
+
+[[survey]]
+name = "CFEPS_r"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], ifree_max = 4.0 }
+
+[[survey]]
+name = "CFEPS_g"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], ifree_max = 4.0 }
+
+[[survey]]
+name = "CFEPS_presurvey"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], ifree_max = 4.0 }
+
+[[survey]]
+name = "MA"
+format = "release"
+cold = { classes = ["cla"], parts = ["m"], ifree_max = 4.0 }
+
+[[survey]]
+name = "jwst_sample_a"
+format = "csv"
+detections = "characterization/jwst_sample_a/jwst_sample_a.csv"
+columns = { mag = "m_f150w2", d_bary = "d_bary", name = "name" }
+select = { comp = "cold" }
+
+[[survey]]
+name = "N26"
+format = "csv"
+detections = "characterization/N26/N26.csv"
+columns = { mag = "m_stmag", d_bary = "d_bary", name = "name" }
+select = { comp = "cold" }

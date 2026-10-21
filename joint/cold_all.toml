@@ -30,7 +30,6 @@ duplicates = "Duplicates"
 name = "OSSOS_v11"
 format = "release"
 cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
-exclude_blocks = ["2015BS"]
 
 [[survey]]
 name = "CFEPS_r"
@@ -41,7 +40,6 @@ cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
 name = "CFEPS_g"
 format = "release"
 cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
-exclude_blocks = ["L3s-smooth", "L3f-smooth"]
 
 [[survey]]
 name = "CFEPS_presurvey"

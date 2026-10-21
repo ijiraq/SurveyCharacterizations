@@ -1,0 +1,45 @@
+# Resonance vetting of the MPC cold candidates (vet_resonances.py)
+# 40 objects with H <= 6, 42.4 <= a <= 47.7, i < 5, q >= 37; nominal and a -/+ 0.005 au clones;
+# 1e+07 yr WHFast, giant planets from JPL Horizons at JD 2461200.5; libration = phi avoids a 20 deg arc,
+# counted in 10 windows. cl = res when the nominal orbit librates in >= half.
+# desig cl  H  <a>  nominal_resonance  libration_fraction (nominal, a-da, a+da)  secure (all three agree)  resonances any orbit librates in
+556416       cla  H=4.62 a=46.39 - 0.0 0.0 0.0 secure 
+523745       cla  H=5.23 a=43.08 - 0.0 0.0 0.0 secure 
+523721       cla  H=5.25 a=44.01 - 0.0 0.0 0.0 secure 
+523724       cla  H=5.26 a=43.58 - 0.0 0.0 0.0 secure 
+79360        cla  H=5.26 a=43.92 - 0.0 0.0 0.0 secure 
+523678       cla  H=5.34 a=45.75 - 0.0 0.0 0.0 secure 
+523588       cla  H=5.37 a=44.55 - 0.0 0.1 0.0 secure 
+534625       cla  H=5.53 a=44.51 - 0.0 0.0 0.0 secure 
+2011LJ29     cla  H=5.55 a=44.15 - 0.0 0.0 0.0 secure 
+2021CJ46     cla  H=5.55 a=43.92 - 0.0 0.0 0.0 secure 
+2004HD79     cla  H=5.60 a=46.01 - 0.0 0.0 0.0 secure 
+2025NH497    cla  H=5.63 a=45.36 - 0.0 0.0 0.0 secure 
+524531       cla  H=5.65 a=43.97 - 0.0 0.0 0.0 secure 
+275809       cla  H=5.66 a=43.91 - 0.0 0.0 0.0 secure 
+2014NB66     cla  H=5.68 a=45.72 - 0.0 0.0 0.0 secure 
+535989       cla  H=5.68 a=44.89 - 0.0 0.0 0.0 secure 
+538690       cla  H=5.70 a=46.64 - 0.0 0.0 0.0 secure 
+472231       cla  H=5.71 a=43.62 - 0.0 0.0 0.0 secure 
+524366       cla  H=5.71 a=43.01 - 0.0 0.0 0.0 secure 
+420356       cla  H=5.75 a=42.76 - 0.0 0.0 0.0 secure 
+523744       cla  H=5.76 a=44.18 - 0.0 0.0 0.0 secure 
+363330       cla  H=5.79 a=43.86 - 0.0 0.0 0.0 secure 
+2004MU8      cla  H=5.83 a=44.94 - 0.0 0.0 0.0 secure 
+469514       cla  H=5.84 a=44.45 - 0.0 0.0 0.0 secure 
+671468       cla  H=5.84 a=43.72 - 0.0 0.0 0.4 secure 
+508869       cla  H=5.85 a=42.49 - 0.0 0.0 0.0 secure 
+2026EK129    cla  H=5.88 a=47.79 2:1 0.1 0.1 0.4 secure 
+66652        cla  H=5.88 a=43.73 7:4 0.3 0.3 0.3 secure 
+2025ND189    cla  H=5.89 a=45.68 - 0.0 0.0 0.0 secure 
+2025MB350    cla  H=5.90 a=45.71 - 0.0 0.0 0.0 secure 
+469509       cla  H=5.91 a=44.09 - 0.0 0.0 0.0 secure 
+2021DS15     cla  H=5.93 a=43.48 - 0.0 0.0 0.0 secure 
+2025NW189    cla  H=5.93 a=44.03 - 0.0 0.0 0.0 secure 
+535028       cla  H=5.93 a=45.48 - 0.0 0.0 0.0 secure 
+385437       cla  H=5.96 a=44.21 - 0.0 0.0 0.0 secure 
+2004DH64     cla  H=5.97 a=46.51 - 0.0 0.0 0.0 secure 
+2025NR189    cla  H=5.97 a=45.86 - 0.0 0.0 0.0 secure 
+88611        cla  H=5.98 a=44.08 - 0.0 0.0 0.0 secure 
+523756       cla  H=5.99 a=43.84 - 0.0 0.0 0.0 secure 
+2001QU297    cla  H=6.00 a=43.78 - 0.0 0.0 0.0 secure 

@@ -1,0 +1,154 @@
+This directory contains the pointings, efficiency files and detections of the
+DEEP B1 linked sample: the 110 TNOs with multi-year orbits from the DECam
+Ecliptic Exploration Project B1 fields, 2019-2021 (Smotherman et al. 2024,
+AJ 167, 136; "DEEP VI"), characterized with the survey description of
+Bernardinelli et al. 2024 (AJ 167, 134; "DEEP III"). It is a multi-epoch
+survey: 29 long stares (epochs), of which an object must be found on 4.
+
+STATUS: the pointings and detections are final; the efficiency is
+PROVISIONAL (the same survey-wide curve on every night). See "Still needed".
+
+The single-night sample of Napier et al. 2024 (PSJ 5, 50; "DEEP V") is not
+used: its ~2300 weighted detections are not published per object. Its Table
+1 per-night efficiencies belong to a different pipeline and do not apply here.
+Bernardinelli et al. 2025 (AJ 169, 305) is the DES photometry paper, not DEEP.
+
+Photometry is DECam VR calibrated to Pan-STARRS rP1 with no colour term (DEEP
+VI Section 2.1), labelled with the filter letter r (Napier et al. also treat
+VR as r). colour.toml needs no new entry.
+
+DEEP
+   \---------- README.deep (this file)
+    \--------- DEEP.toml             survey_debias configuration (aq_grid)
+     \-------- DEEP.csv              the 110 linked objects
+      \------- survey.conf           detections_required = 4
+       \------ epoch1 .. epoch29/    one long stare each, in time order
+        \          pointings.list      DECam outline at the boresight, fill 0.860
+         \         DEEP.eff            single-night efficiency, filter= r
+          \--- make_deep.py          source/ -> DEEP.csv and epoch*/
+           \-- source/
+                   DEEP_VI_table2.dat  VizieR J/AJ/167/136 (DEEP VI Table 2)
+                   DEEP_VI_ReadMe      its VizieR ReadMe
+                   DEEP_VI_table1.txt  DEEP VI Table 1 (fields, nights, boresights)
+                   long_stares.csv     NOIRLab archive: each stare's raw 120 s VR
+                                       exposures (count, first/last UTC, boresight)
+
+    python make_deep.py               regenerate DEEP.csv and epoch*/
+    python make_deep.py --fit-figure  refit DEEP III Eq. (3) to its Figure 2
+    python make_deep.py --fetch       re-query the archive (slow, ~8 min)
+
+Where the values come from
+--------------------------
+
+Detections (DEEP.csv), from DEEP VI Table 2 (barycentric ecliptic elements at
+2019-08-30):
+- m_vr, m_err: mean VR magnitude over the 4-6 detections and its error.
+- a, e, i, Omega, omega, q: the fitted orbit. JPL SBDB agrees for the six
+  objects checked.
+- d_bary: two-body barycentric distance at JD 2459140.5 (2020-10-18, the
+  middle of the 2019-2021 baseline over which m_vr is averaged).
+- comp: cold for non-resonant classicals with 42.4 <= a <= 47.7 au,
+  q >= 37 au, i < 5 deg (the MPC.toml cut), hot for the other classicals,
+  otherwise resonant, detached or scattering from the Class column. 73 cold,
+  23 hot, 6 resonant, 6 detached, 2 scattering. Two classifications are
+  flagged insecure (secure = false).
+- The Table 2 H_VR column is NOT used. It is out of register with the other
+  columns: m_vr - 5 log10(r Delta) agrees with JPL's H to ~0.1 mag (2019 QC110
+  7.81 vs 7.72, 2021 RW237 6.27 vs 6.20, 2020 UT74 9.06 vs 9.00), while H_VR
+  differs from it by a median 0.28 mag and up to 2.7 mag. Matching the H_VR
+  values to the computed H across rows brings the median to 0.025 mag, so the
+  column has been permuted. DEEP VI's text ("a detached object (a ~ 78 au)
+  with H_VR ~ 6.1") agrees with the computed value for 2021 RW237, not with its
+  H_VR of 8.99. 13 rows are also one byte short of the ReadMe layout, so
+  make_deep.py splits on whitespace.
+
+Pointings (epoch*/pointings.list):
+- Nights and boresights: DEEP VI Table 1 (29 long stares). The NOIRLab archive
+  (proposal 2019A-0337) agrees on every one: same number of 120 s VR
+  exposures to within one, boresight within 8" (header vs. Table 1), and the
+  telescope does not move during a stare. The JD is the middle of the stare. Napier et al.'s
+  Table 1 JDs are the stare starts.
+- Footprint: the stepped outline of the DECam CCD rows (DESTNOSIM ccd.py
+  bounds), 3.130 deg^2. Fill 0.860 = the 60 searched CCDs (all but S30 and
+  N30; DESTNOSIM deep.py masks CCDs 2 and 61) over the outline. One polygon
+  per night, as for jwst_sample_a.
+- Observer 500 (geocentric), as for OSSOS: CTIO's parallax is 0.2" at 40 au.
+- Check: every one of the 110 objects, propagated from its Table 2 orbit with
+  astropy's Earth, lies inside the outline on at least 4 nights (minimum 4,
+  median 5, maximum 8). 107 have nights in all three seasons.
+
+Efficiency (epoch*/DEEP.eff):
+- function= double with A = c = 0.787, M0 = m25 = 26.22, d1 = 2/k1 = 0.9346,
+  d2 = 2/k2 = 0.3984: DEEP III Eq. (3), c/[(1+exp(k1 x))(1+exp(k2 x))] with
+  x = m - m25, is OSSSSim's (A/4)(1-tanh(x/d1))(1-tanh(x/d2)). c, k1 and k2
+  are fitted to the vector path of the survey-wide (red) curve of DEEP III
+  Figure 2 with m25 = 26.22 fixed (residual rms 0.0002; c/2 falls at 25.96,
+  as DEEP III quotes). c < 1 includes the area lost to digital tracking.
+- rate_cut= 1.473 5.126: the 50% points of the rate selection, r50,1 = 134.4 and
+  r50,2 = 467.8 px/day (DEEP III Figure 2, right; 0.263"/px), as a hard cut.
+  Kuiper belt objects move at 2-3"/hr. Direction: |phi| < 45 deg about
+  decreasing ecliptic longitude (DEEP III Section 2), -23.3 deg from West
+  at these fields.
+- mag_error: sigma(m) = 0.10 x 10^(0.4 (m - 26)), a fit to the m_err column
+  (slope 0.400, 0.03 dex rms); with phot_frac= 1 0 0, since m_err is already
+  the error of the catalogue mean.
+- mag_lim 27.0: implants reach 28, and the efficiency is < 0.003 at 27.
+- Detection on 4 nights: survey.conf (DEEP VI Section 4.3).
+
+Known approximations
+--------------------
+
+- Same efficiency every night (PROVISIONAL). DEEP III Figure 2 shows the
+  per-stare m25 ranging over about 25.3-26.7. The short September 2021 stares
+  (52-70 exposures) are shallower than the ~100-exposure ones. Per-night
+  values will change which objects reach 4 nights.
+- Linking efficiency: DEEP VI measures 94% (230 of 244 implants). It is one
+  factor per object, so it cannot go in a per-night .eff: multiply the
+  survey's detection probability by 0.94.
+- Linking arc cuts: DEEP VI also requires an arc > 0.8 yr, and > 0.5 yr after
+  dropping the first or last night. survey.conf can only count nights. For B1
+  this matters only where fields overlap within one season (e.g. 3 nights in
+  2021 and 1 in 2020 counts here but would not link). All 110 real objects
+  have nights in at least two seasons.
+- The rate selection is a hard cut at its 50% points. 2021 RW237 (DEEP104,
+  77 au) is at 1.44"/hr on 2020-10-16, just below 1.473. That leaves it 3
+  nights here, though DEEP found it.
+- DECam chip gaps, the dead CCDs and the masked edge are a fill factor, not
+  geometry. Objects move by more than a gap between nights, so the losses are
+  close to independent.
+
+Still needed
+------------
+
+1. The per-pointing-group efficiency table (DESTNOSIM's DEEP pointing-group
+   FITS file, with columns m25, k1, k2, c per POINTING_GROUP and the R50_1,
+   R50_2, KAPPA1, KAPPA2, C header keys). It is not in the public DESTNOSIM
+   repository. With it, make_deep.py can write each night's .eff and a
+   smooth rate selection.
+
+Fixed in the tools (2026-10-20)
+-------------------------------
+
+- ossssim: RADECeclXV (F95/numutils.f95) rotated any observer vector with
+  |z| < 0.1 r from ecliptic to equatorial. Earth's ICRF z is that small within
+  ~15 deg of the equinoxes, which covers every DEEP stare, so the observer was
+  rotated twice: positions were off by ~150" at 45 au and directions of motion
+  by ~27 deg. It now always takes the observer as ICRF (read_jpl_csv already
+  rotates ecliptic Horizons dumps). The SurveySimulator regression test is
+  tests/test_observer_frame.py. Detos1 now gives 2019 QF111 the same RA, Dec
+  and direction (-22.1 deg) as astropy.
+- survey_debias: plants were aimed only at epoch 1's tiles, so DEEP's other
+  fields were never sampled ("sampled 4.2326 deg^2"). A survey found at fewer
+  epochs than it has is now aimed at every epoch's tiles (122.7 deg^2 over 29),
+  with weights that divide out every box holding the orbit. The aimed draws
+  also no longer retry a position the orbit cannot reach: the retry
+  overweighted boxes straddling |beta| ~ i (up to 4.5x for B1g at i = 3 deg),
+  for single-epoch surveys too.
+- Check (a = 44, e = 0.05, i = 3, H_r = 7 on this characterization): random
+  orientations through Detos1 give P(detect) = 2.10e-3 +- 0.05e-3; the aimed
+  estimate is 2.21e-3 +- 0.03e-3 (the ~5% is the existing P_geom
+  approximation, which the single-box case shows as well). Epoch-1 aiming gave
+  6.1e-4.
+- A target-100 survey_debias run on DEEP (6 min) gives median biases of
+  3.3e-3 (cold), 2.1e-4 (hot) and 8.8e-4 (resonant). DEEP104 gets 1.0e-4: the
+  bias is for its (a, q, i, H) cell, not for its exact orbit at the rate edge.

@@ -1,0 +1,270 @@
+MPC complete survey
+===================
+
+The Minor Planet Center orbit catalogue (MPCORB.DAT) treated as a survey
+that has found every cold classical Kuiper belt object (free inclination
+< 4 deg, Huang et al. 2022) brighter
+than an absolute magnitude limit, anywhere on the sky. It is a constraint on
+the bright end of the H distribution, where the pencil-beam surveys in this
+repository have almost no objects.
+
+The survey is in r: MPC.csv h is H_r (PS1/Rubin r scale), measured from the
+MPC observations for the objects near and below the limit, and the limit is
+H_r < 5.42 (MPC H < 5.5).
+
+Files
+-----
+
+  make_mpc.py          MPCORB.DAT + MPC_photometry.csv -> MPC.csv, MPC.duplicates;
+                       --completeness, --calibrate
+  MPC.csv              every MPCORB orbit with 30 <= a <= 150 au and MPC H <= 7
+                       (1917 orbits, 406 with comp = cold), snapshot 2026-10-19;
+                       h = H_r, h_mpc = the MPC's H, ifree = free inclination
+  mpc_photometry.py    MPC observations -> H_r (MPC_photometry.csv,
+                       MPC_band_offsets.txt, obs/)
+  obs/                 the MPC observation files (<desig>.txt) and their
+                       reduction (<desig>_reduced.csv)
+  MPC.duplicates       MPC designation and release name of the 140 objects that
+                       are also OSSOS/CFEPS detections (survey_debias_joint)
+  MPC.vetting          resonance vetting of the cold candidates
+  MPC.toml             the complete-survey spec read by survey_debias
+  MPC_completeness.*   discovery year against H_r (--completeness)
+  MPC_calibration.txt  MPC H and H_r minus OSSOS/CFEPS Hsur (--calibrate)
+  vet_resonances.py    REBOUND integrations behind MPC.vetting
+  make_pointings.py    writes pointings.list and MPC_<lon>.eff (the ossssim version)
+  pointings.list       36 ecliptic-band tiles, each at its own opposition date
+  MPC_<lon>.eff        filter= r; per tile, magnitude limits per rate range that
+                       imitate H_r < h_lim at opposition
+  validate_ossssim.py  runs the cold model through pointings.list + MPC_*.eff
+  MPC_ossssim_validation.{txt,png}   its result
+  mpcread.py           the original extraction script (Python 2, ephem); kept
+                       for reference, superseded by make_mpc.py
+
+  MPCORB.DAT and the Bernardinelli et al. (2020, ApJS 247, 32) epub are not
+  committed. To rebuild, download MPCORB.DAT from
+  https://www.minorplanetcenter.org/iau/MPCORB/MPCORB.DAT, then
+
+    python make_mpc.py            # orbits; h from the existing MPC_photometry.csv
+    python mpc_photometry.py      # (--refresh) re-measure H_r of the candidates
+    python make_mpc.py            # h from the new photometry
+    python make_mpc.py --completeness; python make_mpc.py --calibrate
+
+  and record the snapshot date in MPC.toml.
+
+How h was put on the r scale
+----------------------------
+
+MPCORB gives one H per object (kept as h_mpc), computed by the MPC from
+whatever bands were reported, with its own band corrections; it is close to
+V but not on any defined system. MPC.csv h is H_r instead:
+
+1. mpc_photometry.py measures H_r for every cold candidate with MPC H < 6.0
+   (40 objects; 36 have usable photometry). For each it downloads the
+   observations from the MPC (show_object?object_id=ID, which creates and
+   links the 80-column file tmp2/ID.txt; cached in obs/), computes r, Delta
+   and the phase angle alpha of each observation from the MPC.csv orbit
+   (two-body heliocentric with light time, Earth from astropy; the predicted
+   positions are within 1-5 arcmin of the observed ones over 1997-2026), and
+   reduces each CCD magnitude in its reported band X to
+
+       H_X = m - 5 log10(r Delta) - beta alpha,   beta = 0.14 mag/deg (alpha <= 1.4 deg)
+
+2. The band offsets X - r are measured from the objects themselves
+   (MPC_band_offsets.txt): Rubin (X05) r is the reference, and each band of a
+   system is offset by the median, over the objects observed in both, of its
+   median H_X minus the Rubin r one (16 objects have Rubin r):
+
+       g@Rubin +0.86   i@Rubin -0.41   z@Rubin -0.63
+       w@PS1   -0.04   G@PS1   -0.06   i@PS1   -0.48   r@PS1  -0.28
+
+   Pan-STARRS (F51, F52) "G" magnitudes are on the r/w scale (not g, not Gaia
+   G). The cold colours in colour.toml (r - i = 0.6, r - z = 1.1, w - r = -0.2)
+   are too red for these objects, so they are not used here.
+
+3. H_r of an object is the median over its nights (night medians per band
+   and observatory first) of H_X - (X - r), from PS1 and Rubin only; older R/V
+   reports from other observatories scatter by 0.2-0.4 mag and are not used.
+   The bands of an object agree to ~0.05 mag. Error: 1.25 x robust sd /
+   sqrt(n nights); beta = 0.08 or 0.20 instead of 0.14 moves H_r by ~0.03.
+
+4. make_mpc.py sets h = H_r (h_source = photometry, h_err its error) for the
+   measured objects, and h = h_mpc - 0.084 for the others (h_source =
+   mpc_offset, h_err = 0.082): 0.084 is the median MPC H - H_r of the 35
+   measured objects whose photometry agrees with their MPC H, 0.082 the
+   robust sd. (420356) Praamzius is the exception: its PS1 magnitudes (G ~
+   23.4-23.9) and its older R reports (~21.5) disagree by 2 mag, so its
+   measured H_r (7.23, 1.48 mag fainter than MPC H) is not used
+   (h_source = mpc_offset_photometry_rejected; the threshold is 0.5 mag).
+
+For comparison (MPC_calibration.txt), the OSSOS/CFEPS release Hsur of the
+cold objects in both is brighter than this H_r by 0.11 (r, 23 objects) and
+than MPC H by 0.20: the OSSOS/CFEPS and PS1/Rubin H scales differ by ~0.1 mag.
+
+The completeness limit
+----------------------
+
+Bernardinelli et al. (2020) do not give an H completeness limit for the MPC.
+They show that DES Y4 is complete to m_r ~ 23.3 inside the DES footprint and
+recovers every known MPC object brighter than that. The limit used here is
+measured from the MPC itself: if the census is complete at some H, nothing
+brighter has been discovered recently (MPC_completeness.txt, .png; the
+discovery year is the provisional-designation year).
+
+  * Cold sample (comp = cold, i_free < 4 deg), in H_r (bins with 5.42 as an
+    edge): 5 objects below 5.42, none found since 2014; 2 of the 8 in
+    5.42-5.67 were found since 2017 (2021 CJ46, 2025 NH497). h_lim = 5.42.
+    (With the earlier ecliptic cut, i < 5 deg, the same limit held: 9 objects
+    below 5.42, none found since 2014.)
+  * All TNOs (30 < a < 150 au): 31 discoveries brighter than MPC H = 5.5 since
+    2017, nearly all on high-inclination or large-a, high-e orbits (scattering
+    and detached objects found far from the ecliptic). The MPC is not complete
+    at that H for the whole Kuiper belt, only for the low-inclination
+    classical belt.
+  * The cold objects just below the limit were mostly found in 2011-2014:
+    completeness at this level is recent (Pan-STARRS, OSSOS, DES).
+  * 2025 ME398 (MPC H = 5.45, a = 41.66 au, i = 3.5 deg) is a one-opposition
+    orbit with a 21 day arc (uncertainty 9). Its a puts it inside the inner
+    edge of the cold components (42.4 au), so it is not in the sample; if a
+    longer arc moves it into 42.4-47.7 au it is a new cold object near the
+    limit and h_lim must come down.
+
+The sample: cold = free inclination < 4 deg
+-------------------------------------------
+
+comp = cold when cl = cla, p = m, 42.4 <= a <= 47.7 au and i_free < 4 deg.
+The free inclination is that of Huang, Gladman & Volk (2022, ApJS 259, 54):
+the angle between the orbit pole and the local forcing pole, which a
+non-resonant orbit keeps (to < 1 deg over 4 Gyr) while its ecliptic i
+cycles. I_free < 4 deg separates the cold classicals from the hot
+population much better than ecliptic i < 5 deg (their Figs 1 and 6).
+survey_debias.ifree supplies it:
+
+  * ifree_source = huang2022_table (651 rows): Huang et al. Table 1 (I_free
+    from their double-averaged Hamiltonian, barycentric elements), looked up
+    by number or provisional designation;
+  * ifree_source = huang2022_grid (519 rows): their forcing-pole grid (Table
+    2, nearest grid point, ~0.1 deg) applied to the MPCORB elements after
+    converting them to barycentric at the MPCORB epoch. On Huang's own 1332
+    classicals the grid reproduces Table 1 to < 0.1 deg for 98% and gives
+    the same side of 4 deg for 99.85%;
+  * rows outside the main belt (a < 39.4 or > 47.7 au) have no I_free.
+
+cl = cla needs 39.4 <= a <= 47.7 au and q >= 37 au. For the objects in Huang
+et al. Table 1 their own dynamical classification (huang_reso: 0 classical,
+-1 scattering, pq resonant; a manual 10 Myr classification) decides cl;
+otherwise MPC.vetting (vet_resonances.py) does. The a >= 42.4 au limit is
+the inner edge of the OSSOS 1.0 cold components, which the efficiency is
+computed from; Huang et al. find no classical with I_free < 4 deg inside
+~42 au (the nu_8 and nu_18 secular resonances).
+
+With h_lim = 5.42 the sample is 5 objects, all multi-opposition, all in
+Huang et al. Table 1 and all with measured H_r:
+
+   H_r   err  MPC H  object                   a      e      i   i_free  found
+   5.15  0.02  5.23  (523745) 2014 TD86    43.29  0.006  1.69   0.83   2014
+   5.20  0.02  5.25  (523721) 2014 LR28    43.85  0.057  1.47   1.68   2014
+   5.20  0.02  5.26  (79360) Sila-Nunam    44.08  0.015  2.24   3.79   1997
+   5.37  0.05  5.55  2011 LJ29             43.94  0.081  0.24   1.76   2011
+   5.40  0.03  5.53  (534625) 2014 UQ224   44.72  0.045  1.95   2.16   2014
+
+Compared with the ecliptic cut (i < 5 deg; 9 objects), (556416) 2014 OE394,
+(523724) 2014 MA70 and (523678) 2013 XB26 are hot (i_free = 5.38, 5.51,
+5.19 deg although i < 4.3 deg), and (523588) 2000 CN105 is a 9:5 resonant
+in Huang et al. (our own 10 Myr vetting called it non-resonant: one of its
+clones librated in the 9:5 in a short test; Huang et al. count an object as
+resonant if its angle stops circulating at any time). None of the five is an
+OSSOS or CFEPS detection, so no release detection is dropped as a duplicate.
+
+MPC.toml sigma_h = 0.05 is the scatter of these H_r about the true H_r
+(median-of-nights errors 0.01-0.05, phase coefficient ~0.03).
+
+Resonance vetting (MPC.vetting)
+-------------------------------
+
+vet_resonances.py integrates the 40 candidates with MPC H <= 6.0 (selected,
+at the time, by ecliptic i < 5 deg) for 10 Myr (WHFast, 0.5 yr step, Sun +
+giant planets from JPL Horizons at the MPCORB epoch 2026-06-09), each with
+clones at a -/+ 0.005 au, and tests every Neptune resonance p:q (p <= 40,
+order <= 6) within 0.4 au of the mean a for libration (the resonant angle
+avoids a 20 deg arc) in ten 1 Myr windows. An object is resonant when the
+nominal orbit librates in at least half of them. It now selects candidates by
+i_free < 4 deg; every cold candidate with MPC H <= 6 is either in Huang et
+al. Table 1 or in MPC.vetting, so no new integrations were needed.
+
+None of the 40 is resonant by this criterion, and nominal and clones agree
+for all. Two librate part of the time: (66652) Borasisi in the 7:4 (3 windows
+in 10, H_r = 5.74) and 2026 EK129 near the 2:1 (one opposition, MPC H =
+5.88). Both are above h_lim.
+
+The ossssim version
+-------------------
+
+ossssim efficiencies depend on apparent magnitude and rate, never on H.
+make_pointings.py imitates "H_r < h_lim everywhere" with 36 polygon tiles of
+10 deg in ecliptic longitude (|beta| <= 8 deg, 1 deg overlap between
+neighbours; tiles crossing RA = 0 are written twice, at RA0 and RA0 + 360),
+each observed from the geocentre on the date its centre is at opposition, in
+2026. Each tile has its own MPC_<lon>.eff (filter= r) with Earth's distance
+and tangential speed on that date: at opposition the rate fixes the
+distance, so ten rate ranges with m0 = M0 + alpha_rate * rate (a narrow
+single tanh, width 0.05 mag) follow
+
+    m_lim(r) = h_lim + 5 log10(r (r - R_E)) + phase,
+
+phase = 0.033 mag being ossssim's H-G (G = 0.15) term at the small phase
+angles inside a tile. No tracking loss and essentially no photometric noise
+(mag_error= 0.001 0 99 0 99 0: an exactly zero first coefficient gives NaN
+measured magnitudes fainter than m = 21 in the ossssim build of 2026-10-20);
+the m0 curve is within 0.005 mag of m_lim over 37-62 au.
+
+validate_ossssim.py (40000 cold model rows with i_free < 4 deg, H_r uniform
+in 5.42 +/- 0.75; MPC_ossssim_validation.txt):
+
+  detected for H_r < 5.27:  1.0000        detected for H_r > 5.57:  0.0000
+  50% edge at H_r = 5.415 (-0.005)        90% -> 10% between 5.395 and 5.495
+
+A first version with one .eff for the whole year (Earth's mean speed, no
+phase term) had its edge 0.04 mag bright and was 0.2 mag wide: Earth's speed
+changes by 1.7% over the year, which moves the inferred distance by ~0.9 au.
+
+To use it as a constraint in a SurveySimulator run, simulate the model
+through characterization/MPC and compare the detected cold objects (i_free <
+4 deg, 42.4 <= a <= 47.7 au) with MPC.csv (comp = cold, h < 5.42). The tiles
+only reach |beta| <= 8 deg: fine for i_free < 4 deg orbits (ecliptic i <~ 6
+deg, |beta| <~ 6.3 deg at opposition), not for other populations
+(make_pointings.py --beta-max). The
+ossssim version applies no H scatter; survey_debias adds sigma_h
+analytically.
+
+survey_debias
+-------------
+
+survey_debias does not run the tiles: a complete survey's efficiency is
+analytic, eps(H_r) = f_cut * 1(H_r < h_lim), f_cut being the fraction of the
+model's cold population inside the sample cut (0.714 for i_free < 4 deg,
+the model rows' free inclinations computed with survey_debias.ifree):
+
+  survey_debias_eff --root . --complete characterization/MPC/MPC.toml \
+      --model ../KuiperBeltModels/OSSOS/Classical-ModelUsed.dat \
+      --tag coldfree --ifree-max 4 [--overlap-with OSSOS_v11 ...]
+
+writes characterization/MPC/eps_coldfree.csv (and, with --overlap-with, the
+overlap tables in the model band, for inspection; survey_debias_joint
+computes them itself). The joint configuration joint/coldfree_all_mpc.toml
+adds the MPC as the first survey in priority (joint/cold_all_mpc.toml is the
+earlier i < 5 deg version, eps_cold.csv with f_cut 0.758); see the joint fit
+notes in survey_debias/docs/joint_fit/README.md.
+
+Result with i_free < 4 deg (joint/coldfree_all*.toml; joint/mpc_compare.py
+--config coldfree_all_mpc.toml ...): the all-survey fit without the MPC
+predicts 9.1 +5.5 -3.7 cold MPC objects below H_r = 5.42, 5 are found
+(P(N <= 5) = 0.22); adding them gives N(H_r < 5) = 1.0 +0.7 -0.4 (2.2 +2.2
+-1.2 without) and N(H_r < 6) = 77 +16 -13 (94 +29 -24), and alpha = 0.23 +/-
+0.04 with the small-alpha side of the profile (alpha < 0.13) removed.
+
+Result of the first version (MPC H < 5.5 on the M scale, M - r = +0.20,
+7 objects, i < 5 deg; joint/mpc_compare.py): the all-survey cold fit without the MPC
+predicted 10.3 +5.9 -4.6 MPC objects below the limit, 7 were found; adding
+them narrowed N(H_r < 5) from 2.3 +2.5 -1.5 to 2.0 +1.4 -0.8 and N(H_r < 6)
+from 109 +/- 33 to 102 +/- 18, and cut the alpha < 0.13 side of the
+profile. The fits have not been rerun on the r-band sample.

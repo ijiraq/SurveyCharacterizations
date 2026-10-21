@@ -34,4 +34,3 @@ select = { comp = "cold" }
 name = "OSSOS_v11"
 format = "release"
 cold = { classes = ["cla"], parts = ["m"], i_max = 5.0 }
-exclude_blocks = ["2015BS"]

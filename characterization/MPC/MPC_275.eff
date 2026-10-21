@@ -1,0 +1,50 @@
+# MPC complete survey: detected when H_r is below
+# h_lim = 5.42 for an object at opposition (make_pointings.py).
+# earth: jd= 2461218.48196 r_e= 1.016461 v_e= 29.2879 phase= 0.0328
+# Per rate range: single tanh, m0 = M0 + alpha_rate * rate ["/hr], exact
+# at the range's distance edges; max |m0 - m_lim| inside is given.
+rate_cut= 0.0 20.0 0.0 180.0
+track_frac= 1.0 99.0 0.0
+mag_error= 0.001 0.0 99.0 0.0 99.0 0.0
+phot_frac= 1.0 0.0 0.0
+filter= r
+# r from 62 to 100 au; max error 0.114 mag
+rates= 0.0000 2.0760
+function= single
+single_param= 1.0 29.0745 0.05 -2.76195
+# r from 56 to 62 au; max error 0.005 mag
+rates= 2.0760 2.2847
+function= single
+single_param= 1.0 27.7762 0.05 -2.13657
+# r from 52 to 56 au; max error 0.003 mag
+rates= 2.2847 2.4493
+function= single
+single_param= 1.0 27.4045 0.05 -1.97387
+# r from 49.5 to 52 au; max error 0.001 mag
+rates= 2.4493 2.5650
+function= single
+single_param= 1.0 27.1442 0.05 -1.86759
+# r from 47 to 49.5 au; max error 0.001 mag
+rates= 2.5650 2.6925
+function= single
+single_param= 1.0 26.9320 0.05 -1.78488
+# r from 44.5 to 47 au; max error 0.001 mag
+rates= 2.6925 2.8335
+function= single
+single_param= 1.0 26.7088 0.05 -1.70196
+# r from 42 to 44.5 au; max error 0.002 mag
+rates= 2.8335 2.9905
+function= single
+single_param= 1.0 26.4732 0.05 -1.61882
+# r from 39.5 to 42 au; max error 0.002 mag
+rates= 2.9905 3.1663
+function= single
+single_param= 1.0 26.2238 0.05 -1.53543
+# r from 37 to 39.5 au; max error 0.002 mag
+rates= 3.1663 3.3646
+function= single
+single_param= 1.0 25.9590 0.05 -1.45179
+# r from 30 to 37 au; max error 0.021 mag
+rates= 3.3646 20.0000
+function= single
+single_param= 1.0 25.3983 0.05 -1.28514

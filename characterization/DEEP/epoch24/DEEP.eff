@@ -1,0 +1,48 @@
+# DEEP B1 long stare B1b 2021-10-01 (JD 2459489.59576); written by ../make_deep.py.
+# Single-night selection of the KBMOD digital-tracking search (Smotherman et
+# al. 2024, DEEP VI); survey.conf requires 4 nights for a linked orbit.
+#
+# PROVISIONAL: every night carries the survey-wide efficiency of Bernardinelli
+# et al. 2024 (DEEP III) Figure 2. The per-pointing-group m25, k1, k2, c and the
+# rate-function sharpness are in DEEP's pointing-group file, which is not
+# public. Replace these lines night by night when it is available.
+#
+# Magnitudes are DECam VR calibrated to Pan-STARRS rP1 with no colour term
+# (DEEP VI Section 2.1), labelled r.
+#
+# rate_cut= r_min r_max angle half_width
+#   DEEP III Figure 2: 50% rate completeness at r50,1 = 134.4 and r50,2 = 467.8
+#   px/day (0.263 "/px), applied as a hard cut. The search grid is |phi| < 45 deg
+#   about decreasing ecliptic longitude (DEEP III Section 2), -23.3 deg from
+#   West (positive North) at this field centre.
+#
+rate_cut= 1.473 5.126 -23.3 45.0
+#
+# mag_error: sigma(m) = 0.10 * 10**(0.4 (m - 26)), a fit to the Table 2 m_VR
+# uncertainties (0.03 dex rms). Those are errors of the multi-night mean, so
+# phot_frac draws one measurement.
+#
+mag_error= 0.001 0.64 28 0 40 0
+#
+phot_frac= 1.0 0.0 0.0
+#
+# Linking is applied by survey.conf (4 nights); the 94% linking efficiency of
+# DEEP VI Section 4.3 is one factor per object, not per night, and is not here.
+#
+track_frac= 1.0 26.22 0.0
+#
+filter= r
+#
+rates=  0.00 20.00
+#
+# DEEP III Eq. (3): c / [(1 + exp(k1 (m - m25))) (1 + exp(k2 (m - m25)))],
+# c = 0.787, m25 = 26.22, k1 = 2.14, k2 = 5.02: the survey-wide curve of Figure 2
+# (vector path, residual rms 0.0002; c/2 at m = 25.96 as the paper quotes).
+# double_param A M0 d1 d2 with A = c, M0 = m25, d = 2/k.
+#
+function= double
+double_param= 0.787 26.22 0.9346 0.3984
+#
+# Implants reach m_VR = 28; the efficiency is below 0.003 at 27.0.
+#
+mag_lim= 27.00
