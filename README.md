@@ -18,15 +18,7 @@ read by the OSSOS [SurveySimulator](https://github.com/ijiraq/SurveySimulator)
 | `MPC/` | the MPC orbit catalogue, complete for cold classicals with H_r < 5.42 | 1 (36 tiles) | r |
 | `DEEP/` | DEEP B1 linked sample, 110 TNOs (Smotherman et al. 2024); efficiency provisional | 29 (any 4) | r (DECam VR on PS1 r) |
 
-All of them are under `characterization/`. Sample B of Eduardo et al. (two
-epochs at S/N > 8, a different efficiency) would follow the same layout as
-`jwst_sample_b`. The paper has no sample C: the "C" in its Table 1 marks
-cold classicals.
-
-Orbit models (for example the OSSOS ModelUsed tables or the CFEPS L7 model)
-are deliberately **not** kept here: they drive simulator runs and bias
-calculations, but they are not characterizations. Keep them elsewhere and pass
-them to `survey_debias` with `--model`.
+All of them are under `characterization/`. 
 
 ## Layout
 
@@ -34,8 +26,8 @@ Every file that belongs to a survey lives in that survey's characterization
 directory and is named after it:
 
 ```text
-colour.toml                     colour table shared by every survey in a run
-Duplicates                      OSSOS and CFEPS designations of the 6 objects in both surveys
+colour.toml                     TNO average colours table shared by every survey
+Duplicates                      Objects that appear in multiple surveys. 
 characterization/
   __README__.txt                OSSOS v11 release notes
   CFEPS_g/ CFEPS_r/ CFEPS_presurvey/ HiLat/ MA/ OSSOS_v11/
@@ -87,9 +79,9 @@ characterization/
 - **One survey per directory**: every `.eff` named in `pointings.list` is in
   the same directory, and every `.eff` in the directory is named there.
 - **Multi-epoch surveys** have no `pointings.list` in the survey directory.
-  `ossssim` loads every child directory that holds one as an epoch, and
+  `ossssim` loads every child directory that holds a pointing.list file as an epoch, and
   `survey.conf` sets `detections_required`, the number of epochs at which a
-  simulated object must be found.
+  simulated object must be found.  The fortran branch also supports multiple epochs.
 - **`colour.toml` stays at the root** because SurveySimulator treats colour as
   a property of the simulated object, not of a survey: each simulated object
   carries one colour per filter letter, and each `.eff` file only picks the
@@ -128,7 +120,7 @@ counts them twice.
 
 F150W2 is labelled with the filter letter `H` (close to 2MASS H).
 `colour.toml` sets `"H-g" = -1.7`, so r − H = 1.0, i.e. m_r = m_F150W2 + 1
-as in the paper.
+as documented in Eduardo et al. (2026).
 
 `characterization/jwst_sample_a/README.md` gives the source of every value and
 describes the checks against Eduardo et al. (2026) that set them. In summary:
@@ -179,7 +171,7 @@ MPC to the joint cold fit. `colour.toml` corrects V to Jester et al. (2005)
 
 ## Cold classicals: free inclination
 
-The joint fits in `joint/` select cold classicals one of two ways:
+survey_debias package with the Survey Simulator container on CANFAR and provides routines to 'debias' the detected sample of survey and to code to find the MLE/MCMC constrained parameters of a Tapered Exponential LF that match the data from one or more surveys.  The joint fits in `joint/` select cold classicals one of two ways:
 
 | Configurations | eps tag | Cold sample |
 |---|---|---|
@@ -215,45 +207,6 @@ night until DEEP's per-pointing-group table is available. DEEP needs an
 `ossssim` with the equinox observer-frame fix and a `survey_debias` that aims
 plants at every epoch of a K-of-N survey (both 2026-10-20). Sources, checks
 and approximations are in `characterization/DEEP/README.deep`.
-
-## Installation
-
-Both packages go into the same Python environment (≥ 3.12):
-
-```bash
-cd ../SurveySimulator && SDKROOT=$(xcrun --show-sdk-path) pip install .
-cd ../survey_debias && pip install .
-```
-
-`SDKROOT` is only needed with an older Homebrew GCC whose built-in macOS SDK
-path no longer exists. `survey_debias` must be a version that reads
-`survey.conf` for multi-epoch surveys.
-
-## Computing the bias
-
-Run from the repository root; paths in the TOML are relative to `--root`:
-
-```bash
-survey_debias --survey characterization/jwst_sample_a/jwst_sample_a.toml --root . --dry-run
-survey_debias --survey characterization/jwst_sample_a/jwst_sample_a.toml --root . \
-    --model /path/to/OSSOS/models
-```
-
-`model_ae` surveys such as Sample A need an orbit model for p(a, e | r, i);
-see the survey_debias README for the OSSOS model tables.
-
-Outputs, in `characterization/jwst_sample_a/`:
-
-- `jwst_sample_a.bias.csv`: the bias of each detection, with its Monte Carlo
-  error.
-- `jwst_sample_a.detections-full`: CFEPS-format detections with their bias.
-- `bias_grid_rih.csv`: per-cell cache, reused on re-runs (gitignored; delete
-  it to recompute).
-
-Check plots go to `check_plots/` at the root (gitignored).
-
-The default `--target` is 5000 detections per cell; `--target 200` takes
-about 20 s for Sample A and is enough to check the setup.
 
 ## Tests
 
