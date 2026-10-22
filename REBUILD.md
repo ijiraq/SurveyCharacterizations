@@ -72,7 +72,7 @@ for s in jwst_sample_a N26 DEEP; do
   survey_debias --survey characterization/$s/$s.toml --root . --dry-run
 done
 survey_debias --survey characterization/jwst_sample_a/jwst_sample_a.toml --root . --model Models/OSSOS
-survey_debias --survey characterization/N26/N26.toml --root .
+survey_debias --survey characterization/N26/N26.toml --root . --model Models/OSSOS
 survey_debias --survey characterization/DEEP/DEEP.toml --root .
 ```
 
