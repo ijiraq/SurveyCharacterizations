@@ -4,7 +4,7 @@
 #   survey_debias --survey characterization/N26/N26.toml \
 #       --root . --model Models/OSSOS
 #
-# Orbits are well determined, so this survey uses aq_grid.
+# Orbits are only upper limits, so this survey uses model_ae
 #
 # Paths are relative to --root (the repository root). Everything for this
 # survey lives in characterization/N26/:
@@ -28,7 +28,7 @@ detections_relpath = "characterization/N26/N26.csv"
 detections_full_name = "characterization/N26/N26.detections-full"
 results_name = "characterization/N26/N26.bias.csv"
 check_detected_title = "detected flag≥4 (single 15-day stack)"
-bias_method = "aq_grid"
+bias_method = "model_ae"
 
 # Program name = column in the detections table. These are the columns read.
 # aq_grid requires mag, a, d_bary, e or q, and i or ifree. ifree is Napier's
